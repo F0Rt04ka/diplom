@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+    db:
+        image: mysql
+        ports:
+            - 3310:3306
+        restart: always
+        volumes:
+            - ./data/db:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    php:
+        build: ./docker/php-fpm
+        ports:
+            - "9000:9000"
+        volumes:
+            - ./:/var/www/symfony:cached
+            - ./var/logs:/var/www/symfony/var/logs:cached
+        links:
+            - db
+        extra_hosts:
+            - "docker.host:127.0.0.1"
+    nginx:
+        build: ./docker/nginx
+        ports:
+            - "8080:80"
+        links:
+            - php
+        volumes:
+            - ./var/logs/nginx:/var/log/nginx:cached
+            - ./:/var/www/symfony:cached
