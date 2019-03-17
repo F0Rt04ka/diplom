@@ -1,0 +1,28 @@
+# Read the documentation: https://symfony.com/doc/current/bundles/FOSCKEditorBundle/index.html
+
+twig:
+    form_themes:
+        - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
+
+fos_ck_editor:
+#    autoload: false
+#    async: true
+    base_path: "build/ckeditor"
+    js_path:   "build/ckeditor/ckeditor.js"
+    configs:
+        page_config:
+            toolbar: "page_toolbar"
+    toolbars:
+        configs:
+            page_toolbar:
+                - '@full.clipboard'
+                - '@full.styles'
+                - '@full.colors'
+                - '@full.document'
+                - '/'
+                - '@full.basic_styles'
+                - '@full.paragraph'
+                - '@full.links'
+                - '@full.insert'
+#        items:
+#            full.clipboard: ['PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']

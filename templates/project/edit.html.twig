@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit "{{ project.name }}"{% endblock %}
+
+{% block body %}
+    <h1 class="text-center">{{ project.name }}</h1>
+
+    <div>
+        {{ form_start(select_version_form) }}
+        <div class="form-group row">
+            {{ form_label(select_version_form.version,'', {'label_attr': {'class': 'text-center col-form-label col-md-2'}}) }}
+            {{ form_errors(select_version_form.version) }}
+            <div class="col-md-6">
+                {{ form_widget(select_version_form.version) }}
+            </div>
+            <button type="submit" class="btn btn-primary col-md-2">Select version</button>
+        </div>
+        {{ form_end(select_version_form) }}
+    </div>
+
+    <div class="row">
+        <div class="col">
+            {{ form_start(project_form) }}
+            {{ form_widget(project_form) }}
+            {{ form_end(project_form) }}
+        </div>
+
+        <div class="col">
+            {% for page_num in 1..project.getPagesByVersion(project.selectedVersion).count %}
+                <div style="border: black solid 1px">
+                    <img src="/images/project/{{ project.identifier }}/{{ project.selectedVersion }}/image_{{ page_num }}.png" alt="" height="100%" width="100%">
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {% if project.currentVersion == project.selectedVersion %}
+        {% include 'project/parts/edit_buttons.html.twig' %}
+    {% endif %}
+{% endblock %}

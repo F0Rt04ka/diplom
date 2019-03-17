@@ -1,35 +1,45 @@
-version: '2'
+version: '3'
 
 services:
-    db:
-        image: mysql
-        ports:
-            - 3310:3306
-        restart: always
-        volumes:
-            - ./data/db:/var/lib/mysql
-        environment:
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-            MYSQL_DATABASE: ${MYSQL_DATABASE}
-            MYSQL_USER: ${MYSQL_USER}
-            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    php:
-        build: ./docker/php-fpm
-        ports:
-            - "9000:9000"
-        volumes:
-            - ./:/var/www/symfony:cached
-            - ./var/logs:/var/www/symfony/var/logs:cached
-        links:
-            - db
-        extra_hosts:
-            - "docker.host:127.0.0.1"
-    nginx:
-        build: ./docker/nginx
-        ports:
-            - "8080:80"
-        links:
-            - php
-        volumes:
-            - ./var/logs/nginx:/var/log/nginx:cached
-            - ./:/var/www/symfony:cached
+  mariadb:
+    image: mariadb:10.3
+    restart: always
+    volumes:
+      - ./data/mariadb:/var/lib/mysql
+    ports:
+      - 33061:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: qwerty
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - mariadb:db
+    ports:
+      - 8765:80
+    environment:
+      MYSQL_ROOT_PASSWORD: diplom
+    depends_on:
+      - mariadb
+
+#services:
+#    php:
+#        build: ./docker/php-fpm
+#        ports:
+#            - "9000:9000"
+#        volumes:
+#            - ./:/var/www/symfony:cached
+#            - ./var/logs:/var/www/symfony/var/logs:cached
+#        links:
+#            - db
+#        extra_hosts:
+#            - "docker.host:127.0.0.1"
+#    nginx:
+#        build: ./docker/nginx
+#        ports:
+#            - "8080:80"
+#        links:
+#            - php
+#        volumes:
+#            - ./var/logs/nginx:/var/log/nginx:cached
+#            - ./:/var/www/symfony:cached

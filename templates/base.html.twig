@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}{% if page_title is defined %}{{ page_title }}{% else %}Welcome!{% endif %}{% endblock %}</title>
+        {{ encore_entry_link_tags('app') }}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
+        {% block footer %}{% endblock %}
+
+        {{ encore_entry_script_tags('app') }}
+        {% block javascripts %}
+        {% endblock %}
     </body>
 </html>

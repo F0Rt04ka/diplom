@@ -1,0 +1,8 @@
+{% include 'latex/src/base.tex' %}
+\begin{document}
+{% include 'latex/src/main_page.tex' with {'page': main_page} only %}
+{% for page in empty_pages %}
+{% include 'latex/src/empty_page.tex' with {'page': page} only %}
+{% endfor %}
+
+\end{document}
