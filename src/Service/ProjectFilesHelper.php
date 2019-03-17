@@ -33,7 +33,7 @@ class ProjectFilesHelper
     {
         $fileSystem = new Filesystem();
         $fileSystem->symlink(
-            getcwd() . '/' . $this->getOutputLatexFilePath($projectIdentifier, $projectVersion),
+            $this->getOutputLatexFilePath($projectIdentifier, $projectVersion),
             $this->getSymlinkPath($projectIdentifier, $projectVersion)
         );
     }
