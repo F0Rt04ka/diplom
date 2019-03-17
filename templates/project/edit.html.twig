@@ -38,6 +38,6 @@
 
 {% block footer %}
     {% if project.currentVersion == project.selectedVersion %}
-        {% include 'project/parts/edit_buttons.html.twig' %}
+        {% include 'project/parts/buttons_block.html.twig' with {'project': project} only %}
     {% endif %}
 {% endblock %}

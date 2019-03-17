@@ -1,0 +1,11 @@
+<div id="project-edit-buttons" class="btn-group-vertical btn-group-lg" role="group">
+    <button id="project-save-btn" type="button" class="btn btn-primary">Save</button>
+    <button id="project-add_page-btn" type="button" class="btn btn-secondary">Add page</button>
+    <div class="btn-group" role="group">
+        <button id="project-download-btn" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download</button>
+        <div class="dropdown-menu" aria-labelledby="project-download-btn">
+            <a class="dropdown-item" href="{{ url('project_download', {'identifier': project.identifier, 'version': project.selectedVersion, 'fileType': 'pdf'}) }}">Download PDF</a>
+            <a class="dropdown-item" href="{{ url('project_download', {'identifier': project.identifier, 'version': project.selectedVersion, 'fileType': 'tex'}) }}">Download LATEX</a>
+        </div>
+    </div>
+</div>

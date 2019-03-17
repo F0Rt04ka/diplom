@@ -4,6 +4,7 @@ namespace App\Service;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\File;
 
 class ProjectFilesHelper
 {
@@ -56,6 +57,16 @@ class ProjectFilesHelper
         $fileSystem = new Filesystem();
         if ($fileSystem->exists($file)) {
             $fileSystem->remove($file);
+        }
+    }
+
+    public function getDownloadFile(string $projectIdentifier, int $version, string $fileType)
+    {
+        $fileName = $this->getOutputLatexFilePath($projectIdentifier, $version) . '/output.' . $fileType;
+
+        $fileSystem = new Filesystem();
+        if ($fileSystem->exists($fileName)) {
+            return new File($fileName);
         }
     }
 }

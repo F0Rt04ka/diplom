@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Form\ProjectEditType;
 use App\Repository\ProjectRepository;
 use App\Service\LatexHelper;
+use App\Service\ProjectFilesHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -109,5 +110,22 @@ class ProjectController extends AbstractController
             'project_form' => $mainPageForm->createView(),
             'select_version_form' => $selectVersionForm->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{identifier}/{version}/download/{fileType}", name="project_download", requirements={"version"="\d+", "fileType"="pdf|tex"})
+     * @Entity("project", expr="repository.findByIdentifier(identifier)")
+     */
+    public function download(
+        Project $project,
+        int $version,
+        string $fileType,
+        ProjectFilesHelper $filesHelper
+    ) {
+        if ($file = $filesHelper->getDownloadFile($project->getIdentifier(), $version, $fileType)) {
+            return $this->file($file);
+        }
+
+        throw $this->createNotFoundException('File for this version not founded');
     }
 }
