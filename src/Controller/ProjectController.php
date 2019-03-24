@@ -10,6 +10,7 @@ use App\Service\ProjectFilesHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -38,32 +39,29 @@ class ProjectController extends AbstractController
         Project $project,
         Request $request,
         EntityManagerInterface $em,
-        LatexHelper $latex,
-        ProjectRepository $projectRepository
+        LatexHelper $latexHelper
     ) {
         $mainPageForm = $this->createForm(ProjectEditType::class, $project);
         $mainPageForm->handleRequest($request);
 
         if ($mainPageForm->isSubmitted() && $mainPageForm->isValid()) {
             $project->incCurrentVersion();
-            $latex->createLatexTemplate($project);
+            $latexHelper->createLatexTemplate($project);
 
             $em->persist($project);
             $em->flush();
         }
 
-        $versions = $projectRepository->getVersionForProject($project->getId());
-        $selectVersionForm = $this->createFormBuilder()
-            ->add('version', ChoiceType::class, [
-                'choices' => array_combine($versions, $versions),
-                'preferred_choices' => [$project->getCurrentVersion()]
-            ])
-            ->getForm();
+        $selectVersionForm = $this->createSelectVersionForm($project);
         $selectVersionForm->handleRequest($request);
+
         if ($selectVersionForm->isSubmitted() && $selectVersionForm->isValid()) {
             $selectedVersion = $selectVersionForm->getData()['version'];
             if (intval($selectedVersion) !== $project->getCurrentVersion()) {
-                return $this->redirectToRoute('project_view_version', ['identifier' => $project->getIdentifier(), 'version' => $selectedVersion]);
+                return $this->redirectToRoute('project_view_version', [
+                    'identifier' => $project->getIdentifier(),
+                    'version' => $selectedVersion,
+                ]);
             }
         }
 
@@ -76,40 +74,51 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/{identifier}/version/{version}", name="project_view_version")
+     * @Route("/{identifier}/version/{version}", name="project_view_version", requirements={"version": "\d+"})
      * @Entity("project", expr="repository.findByIdentifier(identifier)")
      */
-    public function viewVersion (
+    public function viewVersion(
         Project $project,
         $version,
-        Request $request,
         ProjectRepository $projectRepository
     ) {
         $selectedVersion = intval($version);
-        if (!in_array($selectedVersion, $projectRepository->getVersionForProject($project->getId()), true) ||
-            intval($selectedVersion) === $project->getCurrentVersion())
-        {
-            return $this->redirectToRoute('project_edit', ['identifier' => $project->getIdentifier()]);
+        $projectVersions = $projectRepository->getVersionForProject($project->getId());
+        if (($selectedVersion === $project->getCurrentVersion()) ||
+            !in_array($selectedVersion, $projectVersions, true)
+        ) {
+            return $this->redirectToRoute('project_edit', [
+                'identifier' => $project->getIdentifier()
+            ]);
         }
 
         $project->setSelectedVersion($selectedVersion);
-        $mainPageForm = $this->createForm(ProjectEditType::class, $project);
-        $mainPageForm->handleRequest($request);
+        $mainPageForm = $this->createForm(ProjectEditType::class, $project,
+            ['attr' => ['readonly' => true]]
+        );
 
+        return $this->render('project/edit.html.twig', [
+            'project' => $project,
+            'project_form' => $mainPageForm->createView(),
+            'select_version_form' => $this->createSelectVersionForm($project)->createView(),
+        ]);
+    }
+
+    private function createSelectVersionForm(Project $project): FormInterface
+    {
+        /** @var ProjectRepository $projectRepository */
+        $projectRepository = $this->getDoctrine()->getRepository(Project::class);
         $versions = $projectRepository->getVersionForProject($project->getId());
-        $selectVersionForm = $this->createFormBuilder()
-            ->setAction($this->generateUrl('project_edit', ['identifier' => $project->getIdentifier()]))
+
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('project_edit', [
+                'identifier' => $project->getIdentifier()
+            ]))
             ->add('version', ChoiceType::class, [
                 'choices' => array_combine($versions, $versions),
                 'preferred_choices' => [$project->getSelectedVersion()]
             ])
             ->getForm();
-
-        return $this->render('project/edit.html.twig', [
-            'project' => $project,
-            'project_form' => $mainPageForm->createView(),
-            'select_version_form' => $selectVersionForm->createView(),
-        ]);
     }
 
     /**
