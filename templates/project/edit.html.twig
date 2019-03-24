@@ -5,18 +5,10 @@
 {% block body %}
     <h1 class="text-center">{{ project.name }}</h1>
 
-    <div>
-        {{ form_start(select_version_form) }}
-        <div class="form-group row">
-            {{ form_label(select_version_form.version,'', {'label_attr': {'class': 'text-center col-form-label col-md-2'}}) }}
-            {{ form_errors(select_version_form.version) }}
-            <div class="col-md-6">
-                {{ form_widget(select_version_form.version) }}
-            </div>
-            <button type="submit" class="btn btn-primary col-md-2">{{ 'Select version'|trans }}</button>
-        </div>
-        {{ form_end(select_version_form) }}
-    </div>
+    {% include 'project/parts/select_version.html.twig' with {
+        'project': project,
+        'form': select_version_form
+    } only %}
 
     <div class="row">
         <div class="col">

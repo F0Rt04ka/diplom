@@ -1,0 +1,15 @@
+<div>
+    {{ form_start(form) }}
+    <div class="form-group row">
+        {{ form_label(form.version, '', {'label_attr': {'class': 'text-center col-form-label col-md-2'}}) }}
+        {{ form_errors(form.version) }}
+        <div class="col-md-6">
+            {{ form_widget(form.version) }}
+        </div>
+        <button type="submit" class="btn btn-primary col-md-2">{{ 'Select version'|trans }}</button>
+        {% if project.selectedVersion != project.currentVersion %}
+            <a href="{{ url('project_view', {'identifier': project.identifier }) }}" class="btn btn-secondary col-md-2">{{ 'Return to last version'|trans }}</a>
+        {% endif %}
+    </div>
+    {{ form_end(form) }}
+</div>
