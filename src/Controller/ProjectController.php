@@ -65,7 +65,6 @@ class ProjectController extends AbstractController
             }
         }
 
-
         return $this->render('project/edit.html.twig', [
             'project' => $project,
             'project_form' => $mainPageForm->createView(),

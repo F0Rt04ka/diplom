@@ -18,9 +18,9 @@
         </div>
 
         <div class="col">
-            {% for page_num in 1..project.getPagesByVersion(project.selectedVersion).count %}
+            {% for page in project.getPagesByVersion(project.selectedVersion) %}
                 <div style="border: black solid 1px">
-                    <img src="/images/project/{{ project.identifier }}/{{ project.selectedVersion }}/image_{{ page_num }}.png" alt="" height="100%" width="100%">
+                    <img src="/images/project/{{ project.identifier }}/{{ project.selectedVersion }}/image_{{ loop.index }}.png" alt="" height="100%" width="100%">
                 </div>
             {% endfor %}
 
