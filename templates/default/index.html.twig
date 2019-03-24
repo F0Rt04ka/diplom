@@ -4,25 +4,25 @@
 {% block body %}
 <div class="row">
     <div class="col card text-center text-white bg-primary" style="margin-right: 20px; margin-left: 20px;">
-        <div class="card-header"><h1>Existing project</h1></div>
+        <div class="card-header"><h1>{{ 'Existing project'|trans }}</h1></div>
         {{ form_start(find_project_form) }}
         <div class="card-body">
             {{ form_widget(find_project_form) }}
         </div>
         <div class="card-footer">
-            <button type="submit" class="btn btn-success btn-block">Go!</button>
+            <button type="submit" class="btn btn-success btn-block">{{ 'Go!'|trans }}</button>
         </div>
         {{ form_end(find_project_form) }}
     </div>
 
     <div class="col card text-center text-white bg-primary" style="margin-right: 20px; margin-left: 20px;">
-        <div class="card-header"><h1>Create new project</h1></div>
+        <div class="card-header"><h1>{{ 'Create new project'|trans }}</h1></div>
         {{ form_start(project_form) }}
         <div class="card-body">
                 {{ form_widget(project_form) }}
         </div>
         <div class="card-footer">
-            <button type="submit" class="btn btn-success btn-block">Create</button>
+            <button type="submit" class="btn btn-success btn-block">{{ 'Create'|trans }}</button>
         </div>
         {{ form_end(project_form) }}
     </div>
