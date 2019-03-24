@@ -58,6 +58,10 @@ class ProjectEditType extends AbstractType implements DataMapperInterface
      */
     public function mapFormsToData($forms, &$data)
     {
+        if (!$data instanceof Project) {
+            throw new UnexpectedTypeException($data, Project::class);
+        }
+
         /** @var FormInterface[] $forms */
         $forms = iterator_to_array($forms);
 
@@ -69,10 +73,10 @@ class ProjectEditType extends AbstractType implements DataMapperInterface
         $data->addPage($mainPage);
 
         foreach ($forms['pages'] as $form) {
-            /** @var EmptyPage $page */
-            $page = $form->getData();
-            $page->setVersion($newVersion);
-            $data->addPage($page);
+            /** @var EmptyPage $newPage */
+            $newPage = clone $form->getData();
+            $newPage->setVersion($newVersion);
+            $data->addPage($newPage);
         }
     }
 
