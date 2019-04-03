@@ -12,10 +12,12 @@
         } only %}
     {% endif %}
 
-    {% include 'project/parts/project_name.html.twig' with {
-        'project': project,
-        'form': project_name_form
-    } only %}
+    {% if project_name_form is defined %}
+        {% include 'project/parts/project_name.html.twig' with {
+            'project': project,
+            'form': project_name_form
+        } only %}
+    {% endif %}
 
     <div class="row">
         <div class="col">

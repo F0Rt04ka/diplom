@@ -9,22 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CVMainPage extends Page
 {
-    const DEFAULT_FIELDS = [
-        'style' => '',
-        'color' => '',
-        'firstName' => '',
-        'lastName' => '',
-        'email' => '',
-        'title' => '',
-        'address' => [],
-        'phones' => [],
-        'social' => [],
-        'sections' => [],
-        'other' => [],
-        'homepage' => '',
-        'extraInfo' => '',
-    ];
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -33,12 +17,11 @@ class CVMainPage extends Page
     /**
      * @ORM\Column(type="array", nullable=true)
      */
-    protected $fields = self::DEFAULT_FIELDS;
+    protected $fields = [];
 
     public function __construct()
     {
         $this->setNumber(0);
-        $this->fields = array_merge($this->fields ?? [], self::DEFAULT_FIELDS);
     }
 
     public function getStyle(): string
@@ -209,6 +192,17 @@ class CVMainPage extends Page
         return $this;
     }
 
+    public function getFontSize(): int
+    {
+        return $this->fields['fontSize'] ?? 11;
+    }
+
+    public function setFontSize(int $fontSize): self
+    {
+        $this->fields['fontSize'] = $fontSize;
+        return $this;
+    }
+
     public function getFields(): array
     {
         return $this->fields;
@@ -216,7 +210,7 @@ class CVMainPage extends Page
 
     public function setFields(array $fields): self
     {
-        $this->fields = array_merge($fields, self::DEFAULT_FIELDS);
+        $this->fields = $fields;
 
         return $this;
     }

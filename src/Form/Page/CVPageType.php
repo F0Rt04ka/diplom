@@ -19,6 +19,14 @@ class CVPageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('fontSize', ChoiceType::class, [
+                'label' => 'page.cv.fontSize',
+                'choices' => [
+                    'page.cv.fontSizes.10' => 10,
+                    'page.cv.fontSizes.11' => 11,
+                    'page.cv.fontSizes.12' => 12,
+                ]
+            ])
             ->add('style', ChoiceType::class, [
                 'label' => 'page.cv.style',
                 'choices' => [

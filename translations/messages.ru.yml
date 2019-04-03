@@ -66,6 +66,11 @@ page:
     extraInfo: Дополнительная информация
     homepage: Homepage
     quote: Цитата
+    fontSize: Размер шрифта
+    fontSizes:
+      10: 10pt
+      11: 11pt
+      12: 12pt
 
 button:
   add:
