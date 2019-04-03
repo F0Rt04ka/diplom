@@ -5,12 +5,9 @@ namespace App\Controller;
 use App\Entity\Project;
 use App\Form\ProjectEditType;
 use App\Repository\ProjectRepository;
-use App\Service\LatexHelper;
 use App\Service\ProjectFilesHelper;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\ProjectRequestHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -35,26 +32,12 @@ class ProjectController extends AbstractController
      * @Route("/{identifier}/edit", name="project_edit")
      * @Entity("project", expr="repository.findByIdentifier(identifier)")
      */
-    public function edit(
-        Project $project,
-        Request $request,
-        EntityManagerInterface $em,
-        LatexHelper $latexHelper
-    ) {
-        $mainPageForm = $this->createForm(ProjectEditType::class, $project);
-        $mainPageForm->handleRequest($request);
+    public function edit(Project $project, Request $request, ProjectRequestHandler $requestHandler) {
+        $mainProjectForm = $requestHandler->handleMainProjectForm($project, $request);
+        $projectNameForm = $requestHandler->handleProjectNameForm($project, $request);
 
-        if ($mainPageForm->isSubmitted() && $mainPageForm->isValid()) {
-            $project->incCurrentVersion();
-            $latexHelper->createLatexTemplate($project);
-
-            $em->persist($project);
-            $em->flush();
-        }
-
-        $selectVersionForm = $this->createSelectVersionForm($project);
+        $selectVersionForm = $requestHandler->createSelectVersionForm($project);
         $selectVersionForm->handleRequest($request);
-
         if ($selectVersionForm->isSubmitted() && $selectVersionForm->isValid()) {
             $selectedVersion = $selectVersionForm->getData()['version'];
             if (intval($selectedVersion) !== $project->getCurrentVersion()) {
@@ -67,7 +50,8 @@ class ProjectController extends AbstractController
 
         return $this->render('project/edit.html.twig', [
             'project' => $project,
-            'project_form' => $mainPageForm->createView(),
+            'project_form' => $mainProjectForm->createView(),
+            'project_name_form' => $projectNameForm->createView(),
             'select_version_form' => $selectVersionForm->createView(),
         ]);
     }
@@ -79,7 +63,8 @@ class ProjectController extends AbstractController
     public function viewVersion(
         Project $project,
         $version,
-        ProjectRepository $projectRepository
+        ProjectRepository $projectRepository,
+        ProjectRequestHandler $requestHandler
     ) {
         $selectedVersion = intval($version);
         $projectVersions = $projectRepository->getVersionForProject($project->getId());
@@ -99,25 +84,8 @@ class ProjectController extends AbstractController
         return $this->render('project/edit.html.twig', [
             'project' => $project,
             'project_form' => $mainPageForm->createView(),
-            'select_version_form' => $this->createSelectVersionForm($project)->createView(),
+            'select_version_form' => $requestHandler->createSelectVersionForm($project)->createView(),
         ]);
-    }
-
-    private function createSelectVersionForm(Project $project): FormInterface
-    {
-        /** @var ProjectRepository $projectRepository */
-        $projectRepository = $this->getDoctrine()->getRepository(Project::class);
-        $versions = $projectRepository->getVersionForProject($project->getId());
-
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('project_edit', [
-                'identifier' => $project->getIdentifier()
-            ]))
-            ->add('version', ChoiceType::class, [
-                'choices' => array_combine($versions, $versions),
-                'preferred_choices' => [$project->getSelectedVersion()]
-            ])
-            ->getForm();
     }
 
     /**

@@ -5,9 +5,16 @@
 {% block body %}
     <h1 class="text-center">{{ project.name }}</h1>
 
-    {% include 'project/parts/select_version.html.twig' with {
+    {% if project.currentVersion > 1 %}
+        {% include 'project/parts/select_version.html.twig' with {
+            'project': project,
+            'form': select_version_form
+        } only %}
+    {% endif %}
+
+    {% include 'project/parts/project_name.html.twig' with {
         'project': project,
-        'form': select_version_form
+        'form': project_name_form
     } only %}
 
     <div class="row">

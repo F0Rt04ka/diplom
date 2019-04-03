@@ -1,0 +1,54 @@
+\documentclass[11pt,a4paper,sans]{moderncv}        % font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family (russian, sans, roman)
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\moderncvstyle{ {{ main_page.style }} }
+\moderncvcolor{ {{ main_page.color }} }
+{#\usepackage[scale=0.75]{geometry} % adjust the page margins#}
+{#%\setlength{\hintscolumnwidth}{3cm}                % if you want to change the width of the column with the dates#}
+\title{ {{ main_page.title}} }
+\name{ {{ main_page.firstName }} }{ {{ main_page.lastName }} }
+
+{% if main_page.address %}\address{street and number}{postcode city}{country}{% endif %}
+{% for phone in main_page.phones %}
+    \phone[{{ phone.type }}]{ {{ phone.number }} }
+{% endfor %}
+{% if main_page.email %}\email{ {{ main_page.email }} }{% endif %}
+{% if main_page.homepage %}\homepage{ {{ main_page.homepage }} }{% endif %}
+{% for social in main_page.social %}
+    \social[{{ social.type }}]{ {{ social.link }} }
+{% endfor %}
+{% if main_page.extraInfo %}\extrainfo{ {{ main_page.extraInfo }} }{% endif %}
+%\photo[64pt][0.4pt]{picture}                       % optional, remove / comment the line if not wanted; '64pt' is the height the picture must be resized to, 0.4pt is the thickness of the frame around it (put it to 0pt for no frame) and 'picture' is the name of the picture file
+{% if main_page.quote %}\quote{ {{ main_page.quote }} }{% endif %}
+
+\begin{document}
+\makecvtitle
+
+{% for section in main_page.sections %}
+\section{ {{ section['name'] }} }
+    {% for item in section['items'] %}
+        {% include 'latex/cv/section_item_'~item['type']~'.html.twig' with {
+            'field1': item['field1'],
+            'field2': item['field2'],
+            'field3': item['field3'],
+            'field4': item['field4'],
+            'field5': item['field5'],
+            'field6': item['field6'],
+        } only %}
+    {% endfor %}
+{% endfor %}
+{#%\cventry{year--year}{Degree}{Institution}{City}{\textit{Grade}}{Description}  % arguments 3 to 6 can be left empty#}
+
+
+{#\cvitemwithcomment{Language 1}{Skill level}{Comment}#}
+{#\cvdoubleitem{category 1}{XXX, YYY, ZZZ}{category 4}{XXX, YYY, ZZZ}#}
+
+{#%\section{References}#}
+{#%\begin{cvcolumns}#}
+{#%  \cvcolumn{Category 1}{\begin{itemize}\item Person 1\item Person %2\item Person 3\end{itemize}}#}
+{#%  \cvcolumn{Category 2}{Amongst others:\begin{itemize}\item Person 1, and\item Person 2\end{itemize}(more upon request)}#}
+{#%  \cvcolumn[0.5]{All the rest \& some more}{\textit{That} person, and \textbf{those} also (all available upon request).}#}
+{#%\end{cvcolumns}#}
+
+{#\clearpage#}
+\end{document}

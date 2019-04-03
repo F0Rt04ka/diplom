@@ -1,0 +1,16 @@
+{#{% use 'form_div_layout.html.twig' %}#}
+
+{% block collection_widget %}
+    {% if prototype is defined and not prototype.rendered %}
+        {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
+    {% endif %}
+    {{- block('form_widget') -}}
+    <button type="button"
+            class="btn btn-outline-primary btn-sm collection_add_button"
+            data-block-id="{{ id }}"
+            data-prototype-name="{{ prototype.vars.name }}"
+            data-prototype-label="{{ prototype.vars.label }}"
+    >
+        {{ ('button.add.'~name)|trans }}
+    </button>
+{% endblock %}

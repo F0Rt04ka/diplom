@@ -14,6 +14,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Project
 {
     const TYPE_DEFAULT = 'default';
+    const TYPE_CV      = 'cv';
+    const TYPES = [
+        self::TYPE_DEFAULT,
+        self::TYPE_CV,
+        ];
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -29,6 +35,7 @@ class Project
 
     /**
      * @Assert\NotBlank()
+     * @Assert\Choice(choices=Project::TYPES)
      * @ORM\Column(type="string", length=50)
      */
     private $type;
@@ -150,9 +157,10 @@ class Project
         return $this;
     }
 
-    public function getMainPage(?int $version = null): ?MainPage
+    public function getMainPage(?int $version = null): ?Page
     {
-        $mainPage = $this->getPagesByType(MainPage::class, $version)->first();
+        $mainPageClass = $this->getType() === self::TYPE_CV ? CVMainPage::class : MainPage::class;
+        $mainPage = $this->getPagesByType($mainPageClass, $version)->first();
 
         return  $mainPage ? $mainPage : null;
     }

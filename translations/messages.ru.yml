@@ -12,5 +12,63 @@ Identifier: Идентификатор
 Name: Имя
 Type: Тип
 Default: __Default
+CV: __CV
+Email: Email
 'Return to last version': 'Вернуться к последней версии'
 'Project not exist!': 'Проект не существует!'
+
+colors:
+  blue: Синий
+  black: Черный
+  burgundy: Burgundy
+  green: Зеленый
+  grey: Серый
+  orange: Оанжевый
+  purple: Пурпурный
+  red: Красный
+
+page:
+  cv:
+    color: Цвет
+    firstName: Имя
+    lastName: Фамилия
+    title: Заголовок резюме
+    style: Стиль
+    styles:
+      classic: Classic
+      casual: Casual
+      banking: Banking
+      oldstyle: Oldstyle
+      fancy: Fancy
+    phones: Номера телефонов
+    phone:
+      number: Номер телефона
+      types:
+        mobile: Мобильный
+        fixed: Фиксированный
+    social:
+      block: Social
+      link: Ссылка
+      types:
+        linkedin: LinkedIn
+        twitter: Twitter
+        github: Github
+        vk: VK
+        skype: Skype
+    sections: Блоки
+    section_item:
+      types:
+        item: item
+        entry: entry
+        listitem: listitem
+        listdoubleitem: listdoubleitem
+        itemwithcomment: itemwithcomment
+    extraInfo: Дополнительная информация
+    homepage: Homepage
+    quote: Цитата
+
+button:
+  add:
+    phones: Добавить номер телефона
+    social: 'Add social'
+    sections: Добавить секцию

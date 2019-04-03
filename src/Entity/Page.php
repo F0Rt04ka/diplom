@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\PageRepository")
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({"main" = "MainPage", "empty" = "EmptyPage"})
+ * @ORM\DiscriminatorMap({"main" = "MainPage", "empty" = "EmptyPage", "cv" = "CVMainPage"})
  */
 abstract class Page
 {

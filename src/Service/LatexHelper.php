@@ -52,11 +52,7 @@ class LatexHelper
     public function createLatexTemplate(Project $project)
     {
         $fileSystem = new Filesystem();
-        $latexData =
-            $this->twig->render('latex/base.html.twig', [
-                'main_page' => $project->getMainPage(),
-                'empty_pages' => $project->getPagesByType(EmptyPage::class),
-            ]);
+        $latexData = $this->renderProject($project);
 
         $outputLatexFilePath = $this->projectFilesHelper->getOutputLatexFilePath($project->getIdentifier(), $project->getCurrentVersion());
         $outputLatexFileName = "$outputLatexFilePath/output.tex";
@@ -80,7 +76,20 @@ class LatexHelper
         $this->projectFilesHelper->createSymlink($project->getIdentifier(), $project->getCurrentVersion());
     }
 
-    private function runLatexCommand(string $latexOutputFilename)
+    public function renderProject(Project $project): string
+    {
+        $renderData = [
+            'main_page' => $project->getMainPage(),
+        ];
+
+        if ($project->getType() === Project::TYPE_DEFAULT) {
+            $renderData += ['empty_pages' => $project->getPagesByType(EmptyPage::class)];
+        }
+
+        return $this->twig->render("latex/base_{$project->getType()}.html.twig", $renderData);
+    }
+
+    private function runLatexCommand(string $latexOutputFilename): void
     {
         $latexCommand = sprintf(
             '%s --interaction=nonstopmode --output-format=dvi --width --output-directory=%s %s > /dev/null 2>&1',
@@ -89,7 +98,7 @@ class LatexHelper
         exec($latexCommand);
     }
 
-    private function runDvipngCommand(string $latexOutputPath)
+    private function runDvipngCommand(string $latexOutputPath): void
     {
         $dvipngCommand = sprintf(
             'cd %s && %s output.dvi -o image_%%d.png',
