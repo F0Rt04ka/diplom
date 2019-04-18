@@ -31,7 +31,7 @@ class ProjectRepository extends ServiceEntityRepository
         $identifier = null;
         do {
             try {
-                $identifier = bin2hex(random_bytes(5));
+                $identifier = bin2hex(random_bytes(7));
             }catch (\Exception $e) {}
         } while ($this->findOneBy(['identifier' => $identifier]));
 

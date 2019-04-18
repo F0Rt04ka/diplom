@@ -38,7 +38,13 @@
 {% endblock %}
 
 {% block footer %}
+    {% if access_level == 'main' %}
+        {% include 'project/parts/modal_links_config.html.twig' %}
+    {% endif %}
     {% if project.currentVersion == project.selectedVersion %}
-        {% include 'project/parts/buttons_block.html.twig' with {'project': project} only %}
+        {% include 'project/parts/buttons_block.html.twig' with {
+            'project': project,
+            'access_level': access_level
+        } only %}
     {% endif %}
 {% endblock %}

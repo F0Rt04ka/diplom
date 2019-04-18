@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Project;
+use App\Entity\ProjectLink;
 use App\Form\ProjectEditType;
+use App\Repository\ProjectLinkRepository;
 use App\Repository\ProjectRepository;
 use App\Service\ProjectFilesHelper;
+use App\Service\ProjectHelper;
 use App\Service\ProjectRequestHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,24 +21,95 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
  */
 class ProjectController extends AbstractController
 {
+    /** @var ProjectRequestHandler */
+    private $requestHandler;
+
+    /** @var ProjectHelper */
+    private $projectHelper;
+
     /**
-     * @Route("/{identifier}", name="project_view")
-     * @Entity("project", expr="repository.findByIdentifier(identifier)")
+     * ProjectController constructor.
+     * @param ProjectRequestHandler $requestHandler
+     * @param ProjectHelper $projectHelper
      */
-    public function view(Project $project)
+    public function __construct(ProjectRequestHandler $requestHandler, ProjectHelper $projectHelper)
     {
-        return $this->redirectToRoute('project_edit', ['identifier' => $project->getIdentifier()]);
+        $this->requestHandler = $requestHandler;
+        $this->projectHelper = $projectHelper;
     }
 
     /**
-     * @Route("/{identifier}/edit", name="project_edit")
-     * @Entity("project", expr="repository.findByIdentifier(identifier)")
+     * @Route("/{identifier}/api/links", options = { "expose" = true }, name="project_links_api", methods={"GET", "POST", "DELETE"})
+     * @Entity("project_link", expr="repository.findByIdentifier(identifier)")
      */
-    public function edit(Project $project, Request $request, ProjectRequestHandler $requestHandler) {
-        $mainProjectForm = $requestHandler->handleMainProjectForm($project, $request);
-        $projectNameForm = $requestHandler->handleProjectNameForm($project, $request);
+    public function apiLinks(ProjectLink $projectLink, Request $request, ProjectLinkRepository $linkRepository)
+    {
+        $project = $projectLink->getProject();
+        if ($request->getMethod() === 'DELETE') {
+            if (!$linkIdentifier = $request->get('linkIdentifier')) {
+                return $this->apiError('"linkIdentifier" is required');
+            }
 
-        $selectVersionForm = $requestHandler->createSelectVersionForm($project);
+            return $this->json(
+                $linkRepository->deleteByIdentifier($project, $linkIdentifier) ?
+                    $linkIdentifier : false
+            );
+        } elseif ($request->getMethod() === 'GET') {
+            return $this->json(
+                $project->getDisplayedProjectLinks()->map(function (ProjectLink $link) {
+                    return $link->toArray();
+                })
+            );
+        } else {
+            $projectLinksForm = $this->requestHandler->createLinksConfigForm($project);
+            $projectLinksForm->handleRequest($request);
+            if ($projectLinksForm->isValid()) {
+                $result = array_map(
+                    function (ProjectLink $newLink) use ($project, $linkRepository) {
+                        $newLink->setProject($project);
+                        $newLink->setIdentifier($linkRepository->generateNewUniqueIdentifier());
+                        $project->addProjectLink($newLink);
+                        $this->getDoctrine()->getManager()->persist($newLink);
+                        return $newLink->toArray();
+                    },
+                    $projectLinksForm->getData()['links']
+                );
+                $this->getDoctrine()->getManager()->flush();
+
+                return $this->json(['result' => $result]);
+            }
+        }
+
+        return $this->json([]);
+    }
+
+    private function apiError(string $message = '')
+    {
+        return $this->json(['error' => ['message' => $message]]);
+    }
+
+    /**
+     * @Route("/{identifier}", name="project_view")
+     * @Entity("project_link", expr="repository.findByIdentifier(identifier)")
+     */
+    public function view(
+        ProjectLink $projectLink,
+        Request $request
+    ) {
+        if ($projectLink->getAccessLevel() === ProjectLink::ACCESS_LVL_MAIN_LINK) {
+            return $this->editAction($projectLink, $request);
+        }
+    }
+
+    private function editAction(
+        ProjectLink $projectLink,
+        Request $request
+    ) {
+        $project = $projectLink->getProject();
+        $mainProjectForm = $this->requestHandler->handleMainProjectForm($project, $request);
+        $projectNameForm = $this->requestHandler->handleProjectNameForm($project, $request);
+
+        $selectVersionForm = $this->requestHandler->createSelectVersionForm($project);
         $selectVersionForm->handleRequest($request);
         if ($selectVersionForm->isSubmitted() && $selectVersionForm->isValid()) {
             $selectedVersion = $selectVersionForm->getData()['version'];
@@ -48,30 +121,35 @@ class ProjectController extends AbstractController
             }
         }
 
+        $projectLinksForm = $this->requestHandler->createLinksConfigForm($project);
+
         return $this->render('project/edit.html.twig', [
+            'access_level' => $projectLink->getAccessLevel(),
             'project' => $project,
             'project_form' => $mainProjectForm->createView(),
             'project_name_form' => $projectNameForm->createView(),
+            'project_links_form' => $projectLinksForm->createView(),
             'select_version_form' => $selectVersionForm->createView(),
         ]);
     }
 
     /**
      * @Route("/{identifier}/version/{version}", name="project_view_version", requirements={"version": "\d+"})
-     * @Entity("project", expr="repository.findByIdentifier(identifier)")
+     * @Entity("project_link", expr="repository.findByIdentifier(identifier)")
      */
     public function viewVersion(
-        Project $project,
+        ProjectLink $projectLink,
         $version,
         ProjectRepository $projectRepository,
         ProjectRequestHandler $requestHandler
     ) {
+        $project = $projectLink->getProject();
         $selectedVersion = intval($version);
         $projectVersions = $projectRepository->getVersionForProject($project->getId());
         if (($selectedVersion === $project->getCurrentVersion()) ||
             !in_array($selectedVersion, $projectVersions, true)
         ) {
-            return $this->redirectToRoute('project_edit', [
+            return $this->redirectToRoute('project_view', [
                 'identifier' => $project->getIdentifier()
             ]);
         }
@@ -90,14 +168,15 @@ class ProjectController extends AbstractController
 
     /**
      * @Route("/{identifier}/{version}/download/{fileType}", name="project_download", requirements={"version"="\d+", "fileType"="pdf|tex"})
-     * @Entity("project", expr="repository.findByIdentifier(identifier)")
+     * @Entity("project_link", expr="repository.findByIdentifier(identifier)")
      */
     public function download(
-        Project $project,
+        ProjectLink $projectLink,
         int $version,
         string $fileType,
         ProjectFilesHelper $filesHelper
     ) {
+        $project = $projectLink->getProject();
         if ($file = $filesHelper->getDownloadFile($project->getIdentifier(), $version, $fileType)) {
             return $this->file($file);
         }

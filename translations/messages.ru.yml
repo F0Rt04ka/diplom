@@ -72,7 +72,17 @@ page:
       11: 11pt
       12: 12pt
 
+project:
+  version: Версия
+  link:
+    access_level: Уровень доступа
+    access_levels:
+      edit: Allow edit
+      comments: Allow add comment
+      view_only: Allow view only
+
 button:
+  save: Сохранить
   add:
     phones: Добавить номер телефона
     social: 'Add social'

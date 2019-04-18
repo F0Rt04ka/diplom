@@ -15,6 +15,7 @@
         "bootstrap": "^4.1.3",
         "ckeditor": "^4.0.0",
         "jquery": "^3.3.1",
+        "jquery-form": "jquery-form/form",
         "popper.js": "^1.14.5"
     }
 }

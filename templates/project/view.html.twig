@@ -3,6 +3,6 @@
 {% block title %}Project "{{ project.name }}"{% endblock %}
 {% block body %}
     <h1 class="text-center">{{ project.name }}</h1>
-    {{ dump() }}
-    <a href="{{ path('project_edit', {'identifier': project.identifier}) }}" class="btn btn-primary btn-lg">Edit</a>
+{#    {{ dump() }}#}
+    <a href="{{ path('project_view', {'identifier': project.identifier}) }}" class="btn btn-primary btn-lg">Edit</a>
 {% endblock %}

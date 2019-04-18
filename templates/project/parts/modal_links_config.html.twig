@@ -1,0 +1,40 @@
+<div class="modal fade" id="modal-links-config" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ 'Links config' }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {{ form_start(project_links_form, {'attr': {'id': 'project_links_form'}}) }}
+            <div class="modal-body">
+                {% set row_prototype %}
+                    <tr id="project-link-__identifier__">
+                        <td>__project_version__</td>
+                        <td>__access_level__</td>
+                        <td>__identifier__</td>
+                        <td><a class="project-link-delete" data-link-identifier="__identifier__"><i class="fas fa-trash"></i></a></td>
+                    </tr>
+                {% endset %}
+                <table id="project-links-table" class="table" data-prototype="{{ row_prototype|escape }}">
+                    <thead>
+                        <tr>
+                            <th>Version</th>
+                            <th>Access level</th>
+                            <th>Identifier</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                {{ form_widget(project_links_form) }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="project-links-save-btn" type="submit" class="btn btn-primary" data-project-identifier="{{ project.identifier }}">{{ 'Save'|trans }}</button>
+            </div>
+            {{ form_end(project_links_form) }}
+        </div>
+    </div>
+</div>

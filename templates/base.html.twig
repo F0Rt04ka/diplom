@@ -5,6 +5,12 @@
         <title>{% block title %}{% if page_title is defined %}{{ page_title }}{% else %}Welcome!{% endif %}{% endblock %}</title>
         {{ encore_entry_link_tags('app') }}
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        {% if project is defined %}
+            <script>
+                const PROJECT_IDENTIFIER = '{{ project.identifier }}';
+            </script>
+        {% endif %}
     </head>
     <body>
         <div class="container">
@@ -14,6 +20,8 @@
 
         {{ encore_entry_script_tags('app') }}
         {% block javascripts %}
+            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
         {% endblock %}
     </body>
 </html>

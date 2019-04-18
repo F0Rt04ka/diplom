@@ -52,18 +52,19 @@ class Project
     private $selectedVersion;
 
     /**
-     * @ORM\Column(type="string", unique=true, length=10)
-     */
-    private $identifier;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Page", mappedBy="project", orphanRemoval=true, cascade={"persist"})
      */
     private $pages;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProjectLink", mappedBy="project", orphanRemoval=true)
+     */
+    private $projectLinks;
+
     public function __construct()
     {
         $this->pages = new ArrayCollection();
+        $this->projectLinks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -116,14 +117,7 @@ class Project
 
     public function getIdentifier(): ?string
     {
-        return $this->identifier;
-    }
-
-    public function setIdentifier(string $identifier): self
-    {
-        $this->identifier = $identifier;
-
-        return $this;
+        return $this->getMainProjectLink()->getIdentifier();
     }
 
     /**
@@ -205,6 +199,54 @@ class Project
     public function setSelectedVersion(int $selectedVersion): Project
     {
         $this->selectedVersion = $selectedVersion;
+
+        return $this;
+    }
+
+    public function getMainProjectLink(): ProjectLink
+    {
+        return $this->projectLinks->filter(function (ProjectLink $link) {
+            return $link->getAccessLevel() === ProjectLink::ACCESS_LVL_MAIN_LINK;
+        })->first();
+    }
+
+    /**
+     * @return Collection|ProjectLink[]
+     */
+    public function getDisplayedProjectLinks(): Collection
+    {
+        return $this->getProjectLinks()->filter(function (ProjectLink $link) {
+            return $link->getAccessLevel() !== ProjectLink::ACCESS_LVL_MAIN_LINK;
+        });
+    }
+
+    /**
+     * @return Collection|ProjectLink[]
+     */
+    public function getProjectLinks(): Collection
+    {
+        return $this->projectLinks;
+    }
+
+    public function addProjectLink(ProjectLink $projectLink): self
+    {
+        if (!$this->projectLinks->contains($projectLink)) {
+            $this->projectLinks[] = $projectLink;
+            $projectLink->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProjectLink(ProjectLink $projectLink): self
+    {
+        if ($this->projectLinks->contains($projectLink)) {
+            $this->projectLinks->removeElement($projectLink);
+            // set the owning side to null (unless already changed)
+            if ($projectLink->getProject() === $this) {
+                $projectLink->setProject(null);
+            }
+        }
 
         return $this;
     }

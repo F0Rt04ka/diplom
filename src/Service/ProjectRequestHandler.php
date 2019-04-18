@@ -3,12 +3,14 @@
 namespace App\Service;
 
 use App\Entity\Project;
+use App\Entity\ProjectLink;
 use App\Form\ProjectEditType;
+use App\Form\ProjectLinkType;
 use App\Form\ProjectNameType;
-use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,20 +28,26 @@ class ProjectRequestHandler extends AbstractController
     /** @var LatexHelper */
     private $latexHelper;
 
+    /** @var ProjectHelper */
+    private $projectHelper;
+
     /**
      * ProjectRequestHandler constructor.
      * @param FormFactoryInterface $formFactory
      * @param EntityManagerInterface $em
      * @param LatexHelper $latexHelper
+     * @param ProjectHelper $projectHelper
      */
     public function __construct(
         FormFactoryInterface $formFactory,
         EntityManagerInterface $em,
-        LatexHelper $latexHelper
+        LatexHelper $latexHelper,
+        ProjectHelper $projectHelper
     ) {
         $this->formFactory = $formFactory;
         $this->em = $em;
         $this->latexHelper = $latexHelper;
+        $this->projectHelper = $projectHelper;
     }
 
     public function handleMainProjectForm(Project $project, Request $request): FormInterface
@@ -71,18 +79,31 @@ class ProjectRequestHandler extends AbstractController
 
     public function createSelectVersionForm(Project $project): FormInterface
     {
-        /** @var ProjectRepository $projectRepository */
-        $projectRepository = $this->getDoctrine()->getRepository(Project::class);
-        $versions = $projectRepository->getVersionForProject($project->getId());
-
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('project_edit', [
+            ->setAction($this->generateUrl('project_view', [
                 'identifier' => $project->getIdentifier()
             ]))
             ->add('version', ChoiceType::class, [
-                'choices' => array_combine($versions, $versions),
+                'choices' => $this->projectHelper->getProjectVersionChoices($project),
                 'preferred_choices' => [$project->getSelectedVersion()]
             ])
+            ->getForm();
+    }
+
+    public function createLinksConfigForm(Project $project)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('project_links_api', ['identifier' => $project->getIdentifier()]))
+            ->setMethod('POST')
+            ->add('links', CollectionType::class, [
+                'entry_options' => [],
+                'entry_type' => ProjectLinkType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'delete_empty' => true,
+                'prototype_data' => new ProjectLink($project),
+            ])
+//            ->setData(['links' => $project->getDisplayedProjectLinks()])
             ->getForm();
     }
 }

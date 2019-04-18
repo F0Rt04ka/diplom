@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Project;
 use App\Form\CreateProjectType;
 use App\Form\FindExistingProjectType;
-use App\Repository\ProjectRepository;
+use App\Service\ProjectHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -17,7 +17,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index(Request $request, EntityManagerInterface $em, ProjectRepository $projectRepository)
+    public function index(Request $request, EntityManagerInterface $em, ProjectHelper $projectHelper)
     {
         $createProjectForm = $this->createForm(CreateProjectType::class, new Project());
         $createProjectForm->handleRequest($request);
@@ -25,11 +25,12 @@ class DefaultController extends AbstractController
         if ($createProjectForm->isSubmitted() && $createProjectForm->isValid()) {
             /** @var Project $project */
             $project = $createProjectForm->getData();
-            $project->setIdentifier($projectRepository->generateNewUniqueIdentifier());
+            $link = $projectHelper->createProjectLink($project);
+            $em->persist($link);
             $em->persist($project);
             $em->flush();
 
-            return $this->redirectToRoute('project_edit', ['identifier' => $project->getIdentifier()]);
+            return $this->redirectToRoute('project_view', ['identifier' => $project->getIdentifier()]);
         }
 
 
@@ -39,7 +40,7 @@ class DefaultController extends AbstractController
         if ($findProjectForm->isSubmitted() && $findProjectForm->isValid()) {
             $identifier = $findProjectForm->getData()['identifier'];
 
-            if ($projectRepository->findByIdentifier($identifier)) {
+            if ($projectHelper->findProjectByIdentifier($identifier)) {
                 return $this->redirectToRoute('project_view', ['identifier' => $identifier]);
             }
 
