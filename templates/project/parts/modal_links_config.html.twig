@@ -13,16 +13,20 @@
                     <tr id="project-link-__identifier__">
                         <td>__project_version__</td>
                         <td>__access_level__</td>
-                        <td>__identifier__</td>
-                        <td><a class="project-link-delete" data-link-identifier="__identifier__"><i class="fas fa-trash"></i></a></td>
+                        <td><a href="{{ absolute_url('/')~'project/__identifier__' }}">__identifier__</a></td>
+                        <td>
+                            <a class="project-link-delete" data-link-identifier="__identifier__" title="Delete link">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
                     </tr>
                 {% endset %}
                 <table id="project-links-table" class="table" data-prototype="{{ row_prototype|escape }}">
                     <thead>
                         <tr>
-                            <th>Version</th>
-                            <th>Access level</th>
-                            <th>Identifier</th>
+                            <th>{{ 'project.version'|trans }}</th>
+                            <th>{{ 'project.link.access_level'|trans }}</th>
+                            <th>{{ 'project.link.identifier'|trans }}</th>
                             <th></th>
                         </tr>
                     </thead>

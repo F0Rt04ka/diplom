@@ -36,14 +36,15 @@ class ProjectLinkType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $accessLevelChoices = [];
+        foreach (ProjectLink::EDITORIAL_ACCESS_LEVELS as $item) {
+            $accessLevelChoices["project.link.access_levels.$item"] = $item;
+        }
+
         $builder
             ->add('accessLevel', ChoiceType::class, [
                 'label' => 'project.link.access_level',
-                'choices' => [
-                    'project.link.access_levels.edit'      => ProjectLink::ACCESS_LVL_EDIT,
-                    'project.link.access_levels.comments'  => ProjectLink::ACCESS_LVL_COMMENTS,
-                    'project.link.access_levels.view_only' => ProjectLink::ACCESS_LVL_VIEW_ONLY,
-                ],
+                'choices' => $accessLevelChoices,
             ])
             ->add('projectVersion')
             ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
@@ -54,11 +55,10 @@ class ProjectLinkType extends AbstractType
                     throw new UnexpectedTypeException($link, ProjectLink::class);
                 }
 
-                $event->getForm()
-                    ->add('projectVersion', ChoiceType::class, [
-                        'choices' =>
-                            $this->projectHelper->getProjectVersionChoices($link->getProject()),
-                    ]);
+                $event->getForm()->add('projectVersion', ChoiceType::class, [
+                    'choices' =>
+                        $this->projectHelper->getProjectVersionChoices($link->getProject()),
+                ]);
             })
         ;
     }

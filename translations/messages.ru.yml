@@ -76,6 +76,7 @@ project:
   version: Версия
   link:
     access_level: Уровень доступа
+    identifier: Идентификатор
     access_levels:
       edit: Allow edit
       comments: Allow add comment
@@ -87,3 +88,4 @@ button:
     phones: Добавить номер телефона
     social: 'Add social'
     sections: Добавить секцию
+    links: Добавить ссылку

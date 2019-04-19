@@ -96,6 +96,7 @@ class ProjectRequestHandler extends AbstractController
             ->setAction($this->generateUrl('project_links_api', ['identifier' => $project->getIdentifier()]))
             ->setMethod('POST')
             ->add('links', CollectionType::class, [
+                'label' => ' ',
                 'entry_options' => [],
                 'entry_type' => ProjectLinkType::class,
                 'allow_add' => true,
@@ -103,7 +104,6 @@ class ProjectRequestHandler extends AbstractController
                 'delete_empty' => true,
                 'prototype_data' => new ProjectLink($project),
             ])
-//            ->setData(['links' => $project->getDisplayedProjectLinks()])
             ->getForm();
     }
 }
