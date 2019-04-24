@@ -1,15 +1,15 @@
 import $ from 'jquery';
 
-var $collectionHolder;
+let $collectionHolder;
 
-var $addPageButton = $('#project-add_page-btn');
+let $addPageButton = $('#project-add_page-btn');
 
 function countIndexForCollection(i, item) {
     let $elem = $(item);
     let $collectionHolder = $('#' + $elem.data('blockId'));
     $collectionHolder.data('index', $collectionHolder.find('fieldset').length);
 }
-function clickHandleAddCollectionItem(event)
+function clickHandleAddCollectionItem()
 {
     let $btn = $(this);
     let blockId = $btn.data('blockId');
@@ -48,5 +48,7 @@ $(document).ready(function() {
             let $collectionHolder = $('#'+$elem.data('blockId'));
             $collectionHolder.data('index', $collectionHolder.find('fieldset').length);
         })
-        .on('click', clickHandleAddCollectionItem)
+        .on('click', clickHandleAddCollectionItem);
+
+    $('#project-save-btn').click(function () { $('form[name="project_edit"]').submit(); });
 });
