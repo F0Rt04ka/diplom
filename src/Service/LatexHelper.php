@@ -24,7 +24,11 @@ class LatexHelper
     /**
      * @var string
      */
-    private $latexPathToDvipngBin;
+    private $latexPathToDviPngBin;
+    /**
+     * @var string
+     */
+    private $latexPathToDviPdfBin;
 
     /**
      * @var Environment
@@ -46,7 +50,8 @@ class LatexHelper
         $latexParams = $params->get('latex');
         $this->latexOutputDir = $latexParams['output_dir'];
         $this->latexPathToBin = $latexParams['latex_bin'];
-        $this->latexPathToDvipngBin = $latexParams['dvipng_bin'];
+        $this->latexPathToDviPngBin = $latexParams['dvipng_bin'];
+        $this->latexPathToDviPdfBin = $latexParams['dvipdf_bin'];
     }
 
     public function createLatexTemplate(Project $project)
@@ -65,7 +70,8 @@ class LatexHelper
         }
 
         $this->runLatexCommand($outputLatexFileName);
-        $this->runDvipngCommand($outputLatexFilePath);
+        $this->runDviPngCommand($outputLatexFilePath);
+        $this->runDviPdfCommand($outputLatexFilePath);
 
         try {
             $fileSystem->remove("$outputLatexFilePath/output.log");
@@ -98,12 +104,21 @@ class LatexHelper
         exec($latexCommand);
     }
 
-    private function runDvipngCommand(string $latexOutputPath): void
+    private function runDviPngCommand(string $latexOutputPath): void
     {
-        $dvipngCommand = sprintf(
+        $command = sprintf(
             'cd %s && %s output.dvi -o image_%%d.png',
-            $latexOutputPath, $this->latexPathToDvipngBin
+            $latexOutputPath, $this->latexPathToDviPngBin
         );
-        exec($dvipngCommand);
+        exec($command);
+    }
+
+    private function runDviPdfCommand(string $latexOutputPath): void
+    {
+        $command = sprintf(
+            'cd %s && %s output.dvi -o output.pdf',
+            $latexOutputPath, $this->latexPathToDviPdfBin
+        );
+        exec($command);
     }
 }

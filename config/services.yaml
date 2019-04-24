@@ -6,6 +6,7 @@ parameters:
         output_dir: 'latex-output'
         latex_bin: '/usr/bin/latex'
         dvipng_bin: '/usr/bin/dvipng'
+        dvipdf_bin: '/usr/bin/dvipdfmx'
 
 
 services:

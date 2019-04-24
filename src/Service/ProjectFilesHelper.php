@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Project;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
@@ -60,13 +61,24 @@ class ProjectFilesHelper
         }
     }
 
-    public function getDownloadFile(string $projectIdentifier, int $version, string $fileType)
-    {
+    public function getDownloadFile(
+        string $projectIdentifier,
+        int $version,
+        string $fileType
+    ): ?File {
         $fileName = $this->getOutputLatexFilePath($projectIdentifier, $version) . '/output.' . $fileType;
 
         $fileSystem = new Filesystem();
         if ($fileSystem->exists($fileName)) {
             return new File($fileName);
         }
+    }
+
+    public function createFilenameForDownloadedFile(
+        Project $project,
+        int $version,
+        string $type
+    ): string {
+        return $project->getName() . '_v' . $version . '.' . $type;
     }
 }

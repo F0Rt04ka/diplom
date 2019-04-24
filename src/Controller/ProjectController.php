@@ -17,7 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 /**
  * Class ProjectController
  * @package App\Controller
- * @Route("/project")
+ * @Route("/project", name="project_")
  */
 class ProjectController extends AbstractController
 {
@@ -39,7 +39,10 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/{identifier}/api/links", options = { "expose" = true }, name="project_links_api", methods={"GET", "POST", "DELETE"})
+     * @Route("/{identifier}/api/links", name="links_api",
+     *     methods={"GET", "POST", "DELETE"},
+     *     options = { "expose" = true }
+     * )
      * @Entity("project_link", expr="repository.findByIdentifier(identifier)")
      */
     public function apiLinks(ProjectLink $projectLink, Request $request, ProjectLinkRepository $linkRepository)
@@ -89,7 +92,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/{identifier}", name="project_view")
+     * @Route("/{identifier}", name="view")
      * @Entity("project_link", expr="repository.findByIdentifier(identifier)")
      */
     public function view(
@@ -134,7 +137,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/{identifier}/version/{version}", name="project_view_version", requirements={"version": "\d+"})
+     * @Route("/{identifier}/version/{version}", name="view_version", requirements={"version": "\d+"})
      * @Entity("project_link", expr="repository.findByIdentifier(identifier)")
      */
     public function viewVersion(
@@ -167,7 +170,9 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/{identifier}/{version}/download/{fileType}", name="project_download", requirements={"version"="\d+", "fileType"="pdf|tex"})
+     * @Route("/{identifier}/{version}/download/{fileType}", name="download",
+     *     requirements={"version"="\d+", "fileType"="pdf|tex"}
+     * )
      * @Entity("project_link", expr="repository.findByIdentifier(identifier)")
      */
     public function download(
@@ -178,7 +183,10 @@ class ProjectController extends AbstractController
     ) {
         $project = $projectLink->getProject();
         if ($file = $filesHelper->getDownloadFile($project->getIdentifier(), $version, $fileType)) {
-            return $this->file($file);
+            return $this->file(
+                $file,
+                $filesHelper->createFilenameForDownloadedFile($project, $version, $fileType)
+            );
         }
 
         throw $this->createNotFoundException('File for this version not founded');
