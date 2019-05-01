@@ -48,6 +48,11 @@ class ProjectLink
      */
     private $projectVersion;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Comments", mappedBy="projectLink", cascade={"persist", "remove"})
+     */
+    private $comments;
+
     public function __construct(?Project $project = null)
     {
         $this->project = $project;
@@ -112,6 +117,23 @@ class ProjectLink
     public function setProjectVersion(?int $projectVersion): self
     {
         $this->projectVersion = $projectVersion;
+
+        return $this;
+    }
+
+    public function getComments(): ?Comments
+    {
+        return $this->comments;
+    }
+
+    public function setComments(Comments $comments): self
+    {
+        $this->comments = $comments;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $comments->getProjectLink()) {
+            $comments->setProjectLink($this);
+        }
 
         return $this;
     }

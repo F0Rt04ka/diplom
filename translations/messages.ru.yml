@@ -1,9 +1,4 @@
 'Select version': 'Выбрать версию'
-Save: Сохранить
-'Add page': 'Добавить страницу'
-Download: Загрузить
-'Download PDF': 'Загрузить PDF'
-'Download LATEX': 'Загрузить LATEX'
 'Existing project': 'Существующий проект'
 Go!: Вперед!
 'Create new project': 'Создать новый проект'
@@ -14,8 +9,12 @@ Type: Тип
 Default: __Default
 CV: __CV
 Email: Email
-'Return to last version': 'Вернуться к последней версии'
-'Project not exist!': 'Проект не существует!'
+Version: Версия
+Return to last version: 'Вернуться к последней версии'
+Project not exist!: 'Проект не существует!'
+Project name: Имя проекта
+Main page: Главная страница
+Links config: Управление доступом
 
 colors:
   blue: Синий
@@ -78,14 +77,33 @@ project:
     access_level: Уровень доступа
     identifier: Идентификатор
     access_levels:
-      edit: Allow edit
-      comments: Allow add comment
-      view_only: Allow view only
+      edit: Редактирование
+      comments: Комментирование
+      view_only: Только просмотр
 
 button:
-  save: Сохранить
+  close: Закрыть
+  download:
+    download: Загрузить
+    pdf: Загрузить PDF
+    latex: Загрузить LATEX
+
+  save:
+    save: Сохранить
+    comments: Сохранить комментарии
   add:
     phones: Добавить номер телефона
     social: 'Add social'
     sections: Добавить секцию
+    items: Добавить пункт
     links: Добавить ссылку
+    comments: Добавить комментарий
+    page: Добавить страницу
+
+label:
+  delete:
+    comments: Удалить комментарий
+    phones: Удалить номер телефона
+    social: 'Delete social'
+    sections: Удалить секцию
+    items: Удалить пункт

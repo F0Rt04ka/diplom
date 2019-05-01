@@ -2,15 +2,21 @@
 
 namespace App\Controller;
 
+use App\Entity\Comments;
 use App\Entity\ProjectLink;
+use App\Form\CommentsType;
 use App\Form\ProjectEditType;
 use App\Repository\ProjectLinkRepository;
 use App\Repository\ProjectRepository;
+use App\Service\AccessHelper;
 use App\Service\ProjectFilesHelper;
 use App\Service\ProjectHelper;
 use App\Service\ProjectRequestHandler;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
@@ -97,17 +103,58 @@ class ProjectController extends AbstractController
      */
     public function view(
         ProjectLink $projectLink,
-        Request $request
-    ) {
-        if ($projectLink->getAccessLevel() === ProjectLink::ACCESS_LVL_MAIN_LINK) {
+        Request $request,
+        AccessHelper $accessHelper,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $project = $projectLink->getProject();
+
+        if ($accessHelper->canEdit()) {
             return $this->editAction($projectLink, $request);
+        } elseif ($accessHelper->canComment()) {
+            $projectLink->getProject()->setCurrentVersion($projectLink->getProjectVersion());
+            if ($projectLink->getComments()) {
+                $existingComments = $projectLink->getComments()->getComments();
+            } else {
+                $emptyCommentsData = ['all_comments' => []];
+                for ($i = 0; $i < $project->getPagesByVersion()->count(); $i++) {
+                    $emptyCommentsData['all_comments'][$i] = ['comments' => []];
+                }
+            }
+            $commentsForm = $this->createForm(CommentsType::class, $existingComments ?? $emptyCommentsData);
+            $commentsForm->handleRequest($request);
+            if ($commentsForm->isSubmitted() && $commentsForm->isValid()) {
+                if (!$newComments = $projectLink->getComments()) {
+                    $newComments = new Comments();
+                    $projectLink->setComments($newComments);
+                }
+                $newComments->setComments($commentsForm->getData());
+                $newComments->setIsNew(true);
+                $entityManager->merge($newComments);
+                $entityManager->flush();
+            }
+
+            return $this->render('project/edit.html.twig', [
+                'project' => $project,
+                'comments_form' => $commentsForm->createView(),
+            ]);
+        } elseif ($accessHelper->canViewOnly()) {
+            $project->setCurrentVersion($projectLink->getProjectVersion());
+            $mainProjectForm = $this->requestHandler->createMainProjectForm($project, true);
+
+            return $this->render('project/edit.html.twig', [
+                'project' => $project,
+                'project_form' => $mainProjectForm->createView(),
+            ]);
         }
+
+        return new Response('', Response::HTTP_I_AM_A_TEAPOT);
     }
 
     private function editAction(
         ProjectLink $projectLink,
         Request $request
-    ) {
+    ): Response {
         $project = $projectLink->getProject();
         $mainProjectForm = $this->requestHandler->handleMainProjectForm($project, $request);
         $projectNameForm = $this->requestHandler->handleProjectNameForm($project, $request);
@@ -127,7 +174,6 @@ class ProjectController extends AbstractController
         $projectLinksForm = $this->requestHandler->createLinksConfigForm($project);
 
         return $this->render('project/edit.html.twig', [
-            'access_level' => $projectLink->getAccessLevel(),
             'project' => $project,
             'project_form' => $mainProjectForm->createView(),
             'project_name_form' => $projectNameForm->createView(),
@@ -158,9 +204,7 @@ class ProjectController extends AbstractController
         }
 
         $project->setSelectedVersion($selectedVersion);
-        $mainPageForm = $this->createForm(ProjectEditType::class, $project,
-            ['attr' => ['readonly' => true]]
-        );
+        $mainPageForm = $this->requestHandler->createMainProjectForm($project, true);
 
         return $this->render('project/edit.html.twig', [
             'project' => $project,

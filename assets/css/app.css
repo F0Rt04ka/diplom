@@ -1,4 +1,4 @@
-.project-link-delete {
+.project-link-delete, .collection_delete_button {
     cursor: pointer;
 }
 
@@ -6,4 +6,13 @@
     position: fixed;
     bottom: 36px;
     right: 0;
+}
+
+.page-image {
+    border: black solid 1px;
+
+    img {
+        height: 100%;
+        width: 100%;
+    }
 }

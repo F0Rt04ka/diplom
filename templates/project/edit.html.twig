@@ -1,50 +1,78 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit "{{ project.name }}"{% endblock %}
+{% block title %}
+    {% if access_helper.canEdit %}
+        Edit
+    {% elseif access_helper.canComment %}
+        Comments for
+    {% else %}
+        View
+    {% endif %}
+    "{{ project.name }}"
+{% endblock %}
 
 {% block body %}
     <h1 class="text-center">{{ project.name }}</h1>
+    {% if access_helper.canViewOnly() or access_helper.canComment() %}
+        <p class="text-center">{{ 'Version'|trans }} {{ project.currentVersion }}</p>
+    {% endif %}
 
-    {% if project.currentVersion > 1 %}
+    {% if select_version_form is defined and project.currentVersion > 1  and access_helper.canEdit() %}
         {% include 'project/parts/select_version.html.twig' with {
             'project': project,
             'form': select_version_form
         } only %}
     {% endif %}
 
-    {% if project_name_form is defined %}
+    {% if project_name_form is defined and access_helper.canEdit() %}
         {% include 'project/parts/project_name.html.twig' with {
             'project': project,
             'form': project_name_form
         } only %}
     {% endif %}
-
+    {% if access_helper.canComment and comments_form is defined %}
+        {{ form_start(comments_form) }}
+        {% for page in project.getPagesByVersion(project.selectedVersion) %}
+            <div class="row">
+                <div class="col page-comments-block" data-num="{{ loop.index }}">
+                    {{ form(comments_form.all_comments) }}
+                    {% if comments_form.all_comments[loop.index] is defined %}
+                        {{ form(comments_form.all_comments[loop.index]) }}
+                    {% endif %}
+                </div>
+                <div class="col">
+                    {{ render_page_image(project, loop.index)|raw }}
+                </div>
+            </div>
+        {% endfor %}
+        {{ form_widget(comments_form._token) }}
+{#        {{ form_end(comments_form, {'render_rest': false}) }}#}
+        {{ form_end(comments_form) }}
+    {% else %}
     <div class="row">
         <div class="col">
-            {{ form_start(project_form) }}
-            {{ form_widget(project_form) }}
-            {{ form_end(project_form) }}
+            {% if project_form is defined %}
+                {{ form_start(project_form) }}
+                {{ form_widget(project_form) }}
+                {{ form_end(project_form) }}
+            {% endif %}
         </div>
 
         <div class="col">
             {% for page in project.getPagesByVersion(project.selectedVersion) %}
-                <div style="border: black solid 1px">
-                    <img src="/images/project/{{ project.identifier }}/{{ project.selectedVersion }}/image_{{ loop.index }}.png" alt="" height="100%" width="100%">
-                </div>
+                {{ render_page_image(project, loop.index)|raw }}
             {% endfor %}
 
         </div>
     </div>
+    {% endif %}
 {% endblock %}
 
 {% block footer %}
-    {% if access_level == 'main' %}
+    {% if access_helper.isMainAccess() %}
         {% include 'project/parts/modal_links_config.html.twig' %}
     {% endif %}
-    {% if project.currentVersion == project.selectedVersion %}
-        {% include 'project/parts/buttons_block.html.twig' with {
-            'project': project,
-            'access_level': access_level
-        } only %}
-    {% endif %}
+    {% include 'project/parts/buttons_block.html.twig' with {
+        'project': project
+    } only %}
 {% endblock %}

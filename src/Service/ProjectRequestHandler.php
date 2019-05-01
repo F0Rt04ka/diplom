@@ -65,6 +65,11 @@ class ProjectRequestHandler extends AbstractController
         return $mainPageForm;
     }
 
+    public function createMainProjectForm(Project $project, bool $disabled = false): FormInterface
+    {
+        return $this->createForm(ProjectEditType::class, $project, ['disabled' => $disabled]);
+    }
+
     public function handleProjectNameForm(Project $project, Request $request): FormInterface
     {
         $projectNameForm = $this->formFactory->create(ProjectNameType::class, $project);

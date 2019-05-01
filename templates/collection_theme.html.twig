@@ -4,13 +4,40 @@
     {% if prototype is defined and not prototype.rendered %}
         {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
     {% endif %}
+
     {{- block('form_widget') -}}
-    <button type="button"
-            class="btn btn-outline-primary btn-sm collection_add_button"
-            data-block-id="{{ id }}"
-            data-prototype-name="{{ prototype.vars.name }}"
-            data-prototype-label="{{ prototype.vars.label }}"
-    >
-        {{ ('button.add.'~name)|trans }}
-    </button>
+
+    {% if allow_add and (access_helper.canEdit or access_helper.canComment) %}
+        <button type="button"
+                class="btn btn-outline-primary btn-sm collection_add_button"
+                data-block-id="{{ id }}"
+                data-prototype-name="{{ prototype.vars.name }}"
+                data-prototype-label="{{ prototype.vars.label }}"
+                data-new-index="{{ form.children|length}}"
+        >
+            {{ ('button.add.'~name)|trans }}
+        </button>
+    {% endif %}
 {% endblock %}
+
+{%- block form_rows -%}
+    {% for child in form %}
+        {% if
+            'collection' in form.vars.block_prefixes and
+            form.vars.allow_delete and
+            (access_helper.canEdit or access_helper.canComment)
+        %}
+            <div class="row">
+                <a class="collection_delete_button col-1"
+                   data-block-id="{{ child.vars.id }}" title="{{ ('label.delete.'~form.vars.name)|trans }}">
+                    <i class="fas fa-trash"></i>
+                </a>
+                <div class="col-11">
+                    {{- form_row(child) -}}
+                </div>
+            </div>
+        {% else %}
+            {{- form_row(child) -}}
+        {% endif %}
+    {% endfor %}
+{%- endblock form_rows -%}

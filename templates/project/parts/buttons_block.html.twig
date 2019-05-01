@@ -1,12 +1,25 @@
 <div id="project-edit-buttons" class="btn-group-vertical btn-group-lg" role="group">
-    <button id="project-save-btn" type="button" class="btn btn-primary">{{ 'Save'|trans }}</button>
-    <button id="project-add_page-btn" type="button" class="btn btn-secondary">{{ 'Add page'|trans }}</button>
+    {% if access_helper.canEdit() %}
+        <button id="project-save-btn" type="button" class="btn btn-primary">{{ 'button.save.save'|trans }}</button>
+        <button id="project-add_page-btn" type="button" class="btn btn-secondary">{{ 'button.add.page'|trans }}</button>
+        <button id="project-modal_links-btn" type="button" class="btn btn-secondary">{{ 'Links config'|trans }}</button>
+    {% endif %}
+    {% if access_helper.canComment() %}
+        <button id="project-save-comments-btn" type="button" class="btn btn-primary">{{ 'button.save.comments'|trans }}</button>
+    {% endif %}
     <div class="btn-group" role="group">
-        <button id="project-download-btn" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ 'Download'|trans }}</button>
+        <button id="project-download-btn" type="button"
+                class="btn {% if access_helper.canViewOnly() %}btn-primary{% else %}btn-secondary{% endif %} dropdown-toggle"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ 'button.download.download'|trans }}
+        </button>
         <div class="dropdown-menu" aria-labelledby="project-download-btn">
-            <a class="dropdown-item" href="{{ url('project_download', {'identifier': project.identifier, 'version': project.selectedVersion, 'fileType': 'pdf'}) }}">{{ 'Download PDF'|trans }}</a>
-            <a class="dropdown-item" href="{{ url('project_download', {'identifier': project.identifier, 'version': project.selectedVersion, 'fileType': 'tex'}) }}">{{ 'Download LATEX'|trans }}</a>
+            <a class="dropdown-item" href="{{ url('project_download', {'identifier': access_helper.identifier, 'version': project.selectedVersion, 'fileType': 'pdf'}) }}">
+                {{ 'button.download.pdf'|trans }}
+            </a>
+            <a class="dropdown-item" href="{{ url('project_download', {'identifier': access_helper.identifier, 'version': project.selectedVersion, 'fileType': 'tex'}) }}">
+                {{ 'button.download.latex'|trans }}
+            </a>
         </div>
     </div>
-    <button id="project-modal_links-btn" type="button" class="btn btn-secondary">{{ 'Links config'|trans }}</button>
 </div>
