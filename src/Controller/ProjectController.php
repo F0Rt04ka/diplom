@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Comments;
+use App\Entity\Project;
 use App\Entity\ProjectLink;
 use App\Form\CommentsType;
-use App\Form\ProjectEditType;
 use App\Repository\ProjectLinkRepository;
 use App\Repository\ProjectRepository;
 use App\Service\AccessHelper;
@@ -14,7 +14,6 @@ use App\Service\ProjectHelper;
 use App\Service\ProjectRequestHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -108,9 +107,8 @@ class ProjectController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response {
         $project = $projectLink->getProject();
-
         if ($accessHelper->canEdit()) {
-            return $this->editAction($projectLink, $request);
+            return $this->editAction($project, $request, $accessHelper->isMainAccess());
         } elseif ($accessHelper->canComment()) {
             $projectLink->getProject()->setCurrentVersion($projectLink->getProjectVersion());
             if ($projectLink->getComments()) {
@@ -152,15 +150,14 @@ class ProjectController extends AbstractController
     }
 
     private function editAction(
-        ProjectLink $projectLink,
-        Request $request
+        Project $project,
+        Request $request,
+        bool $isMainAccess
     ): Response {
-        $project = $projectLink->getProject();
         $mainProjectForm = $this->requestHandler->handleMainProjectForm($project, $request);
-        $projectNameForm = $this->requestHandler->handleProjectNameForm($project, $request);
-
         $selectVersionForm = $this->requestHandler->createSelectVersionForm($project);
         $selectVersionForm->handleRequest($request);
+
         if ($selectVersionForm->isSubmitted() && $selectVersionForm->isValid()) {
             $selectedVersion = $selectVersionForm->getData()['version'];
             if (intval($selectedVersion) !== $project->getCurrentVersion()) {
@@ -171,15 +168,22 @@ class ProjectController extends AbstractController
             }
         }
 
-        $projectLinksForm = $this->requestHandler->createLinksConfigForm($project);
-
-        return $this->render('project/edit.html.twig', [
+        $params = [
             'project' => $project,
             'project_form' => $mainProjectForm->createView(),
-            'project_name_form' => $projectNameForm->createView(),
-            'project_links_form' => $projectLinksForm->createView(),
             'select_version_form' => $selectVersionForm->createView(),
-        ]);
+        ];
+
+        if ($isMainAccess) {
+            $projectNameForm = $this->requestHandler->handleProjectNameForm($project, $request);
+            $projectLinksForm = $this->requestHandler->createLinksConfigForm($project);
+            $params += [
+                'project_name_form' => $projectNameForm->createView(),
+                'project_links_form' => $projectLinksForm->createView(),
+            ];
+        }
+
+        return $this->render('project/edit.html.twig', $params);
     }
 
     /**
