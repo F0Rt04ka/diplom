@@ -7,7 +7,7 @@
             {{ form_widget(form.version) }}
         </div>
         <button type="submit" class="btn btn-primary col-md-2">{{ 'Select version'|trans }}</button>
-        {% if project.selectedVersion != project.currentVersion %}
+        {% if access_helper.isViewVersionPage %}
             <a href="{{ url('project_view', {'identifier': project.identifier }) }}" class="btn btn-secondary col-md-2">{{ 'Return to last version'|trans }}</a>
         {% endif %}
     </div>

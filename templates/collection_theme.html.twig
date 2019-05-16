@@ -7,7 +7,7 @@
 
     {{- block('form_widget') -}}
 
-    {% if allow_add and (access_helper.canEdit or access_helper.canComment) %}
+    {% if allow_add and not access_helper.isViewVersionPage and (access_helper.canEdit or access_helper.canComment) %}
         <button type="button"
                 class="btn btn-outline-primary btn-sm collection_add_button"
                 data-block-id="{{ id }}"
@@ -25,7 +25,8 @@
         {% if
             'collection' in form.vars.block_prefixes and
             form.vars.allow_delete and
-            (access_helper.canEdit or access_helper.canComment)
+            (access_helper.canEdit or access_helper.canComment) and
+            not access_helper.isViewVersionPage
         %}
             <div class="row">
                 <a class="collection_delete_button col-1"

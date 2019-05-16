@@ -14,16 +14,23 @@ class AccessHelper
     /** @var string */
     private $identifier;
 
+    /** @var bool */
+    private $isViewVersionPage;
+
     public function __construct(RequestStack $requestStack, ProjectLinkRepository $linkRepository)
     {
         $request = $requestStack->getMasterRequest();
         $projectIdentifier = $request->get('project_identifier', $request->get('identifier'));
-        if ($projectIdentifier) {
-            if ($link = $linkRepository->findByIdentifier($projectIdentifier)) {
-                $this->accessLevel = $link->getAccessLevel();
-                $this->identifier = $link->getIdentifier();
-            }
+        if ($projectIdentifier && $link = $linkRepository->findByIdentifier($projectIdentifier)) {
+            $this->accessLevel = $link->getAccessLevel();
+            $this->identifier = $link->getIdentifier();
         }
+        $this->isViewVersionPage = $request->get('_route') === 'project_view_version';
+    }
+
+    public function isViewVersionPage(): bool
+    {
+        return $this->isViewVersionPage;
     }
 
     public function isMainAccess(): bool
