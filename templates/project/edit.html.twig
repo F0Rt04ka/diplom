@@ -17,6 +17,13 @@
         <p class="text-center">{{ 'Version'|trans }} {{ project.currentVersion }}</p>
     {% endif %}
 
+    {% if project_name_form is defined and access_helper.canEdit() %}
+        {% include 'project/parts/project_name.html.twig' with {
+            'project': project,
+            'form': project_name_form
+        } only %}
+    {% endif %}
+
     {% if select_version_form is defined and project.currentVersion > 1  and access_helper.canEdit() %}
         {% include 'project/parts/select_version.html.twig' with {
             'project': project,
@@ -24,12 +31,6 @@
         } only %}
     {% endif %}
 
-    {% if project_name_form is defined and access_helper.canEdit() %}
-        {% include 'project/parts/project_name.html.twig' with {
-            'project': project,
-            'form': project_name_form
-        } only %}
-    {% endif %}
     {% if access_helper.canComment and comments_form is defined %}
         {{ form_start(comments_form) }}
         {% for page in project.getPagesByVersion(project.selectedVersion) %}

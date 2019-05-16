@@ -14,8 +14,8 @@ class EmptyPageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('text', CKEditorType::class, ['empty_data' => ''])
-            ->add('number', HiddenType::class)
+            ->add('text', CKEditorType::class, ['empty_data' => '', 'label' => ' '])
+//            ->add('number', HiddenType::class, ['data' => '__name__'])
         ;
     }
 

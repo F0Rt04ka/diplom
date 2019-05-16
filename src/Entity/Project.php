@@ -111,6 +111,7 @@ class Project
     public function incCurrentVersion(): self
     {
         $this->currentVersion++;
+        $this->selectedVersion = $this->currentVersion;
 
         return $this;
     }

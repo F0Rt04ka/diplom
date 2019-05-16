@@ -1,9 +1,5 @@
 import $ from 'jquery';
 
-let $collectionHolder;
-
-let $addPageButton = $('#project-add_page-btn');
-
 function countIndexForCollection(i, item) {
     let $elem = $(item);
     let $collectionHolder = $('#' + $elem.data('blockId'));
@@ -33,20 +29,6 @@ function clickHandlerDeleteCollectionItem() {
 }
 
 $(document).ready(function () {
-    $collectionHolder = $('#project_edit_pages');
-    $collectionHolder.data('index', $collectionHolder.find(':input').length);
-
-    $addPageButton.on('click', function () {
-        let index = $collectionHolder.data('index');
-        let newForm = $collectionHolder.data('prototype').replace(/__name__/g, index);
-        $collectionHolder.data('index', index + 1);
-        $collectionHolder.append(newForm);
-
-        $('[id^="project_edit_pages_"][id$="_number"]').each(function (i, elem) {
-            $(elem).val(i + 1);
-        });
-    });
-
     $('.collection_add_button').on('click', clickHandlerAddCollectionItem);
     $('.collection_delete_button').on('click', clickHandlerDeleteCollectionItem);
     $('#project-save-btn').click(function () {
