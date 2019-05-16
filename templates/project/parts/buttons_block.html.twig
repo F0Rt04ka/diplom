@@ -1,7 +1,6 @@
 <div id="project-edit-buttons" class="btn-group-vertical btn-group-lg" role="group">
     {% if access_helper.canEdit() %}
         <button id="project-save-btn" type="button" class="btn btn-primary">{{ 'button.save.save'|trans }}</button>
-        <button id="project-add_page-btn" type="button" class="btn btn-secondary">{{ 'button.add.page'|trans }}</button>
         <button id="project-modal_links-btn" type="button" class="btn btn-secondary">{{ 'Links config'|trans }}</button>
     {% endif %}
     {% if access_helper.canComment() %}
