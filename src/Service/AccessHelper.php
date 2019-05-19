@@ -19,7 +19,10 @@ class AccessHelper
 
     public function __construct(RequestStack $requestStack, ProjectLinkRepository $linkRepository)
     {
-        $request = $requestStack->getMasterRequest();
+        if (!$request = $requestStack->getMasterRequest()) {
+            return;
+        }
+
         $projectIdentifier = $request->get('project_identifier', $request->get('identifier'));
         if ($projectIdentifier && $link = $linkRepository->findByIdentifier($projectIdentifier)) {
             $this->accessLevel = $link->getAccessLevel();

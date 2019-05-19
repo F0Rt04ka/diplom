@@ -36,7 +36,6 @@
         {% for page in project.getPagesByVersion(project.selectedVersion) %}
             <div class="row">
                 <div class="col page-comments-block" data-num="{{ loop.index }}">
-                    {{ form(comments_form.all_comments) }}
                     {% if comments_form.all_comments[loop.index] is defined %}
                         {{ form(comments_form.all_comments[loop.index]) }}
                     {% endif %}
