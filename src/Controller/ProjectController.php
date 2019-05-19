@@ -132,7 +132,7 @@ class ProjectController extends AbstractController
                 $entityManager->flush();
             }
 
-            return $this->render('project/edit.html.twig', [
+            return $this->render('project/comments.html.twig', [
                 'project' => $project,
                 'comments_form' => $commentsForm->createView(),
             ]);
@@ -140,7 +140,7 @@ class ProjectController extends AbstractController
             $project->setCurrentVersion($projectLink->getProjectVersion());
             $mainProjectForm = $this->requestHandler->createMainProjectForm($project, true);
 
-            return $this->render('project/edit.html.twig', [
+            return $this->render('project/view_only.html.twig', [
                 'project' => $project,
                 'project_form' => $mainProjectForm->createView(),
             ]);

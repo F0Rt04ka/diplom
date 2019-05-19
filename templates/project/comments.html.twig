@@ -1,0 +1,21 @@
+{% extends 'project/base.html.twig' %}
+
+{% block content %}
+    <p class="text-center">{{ 'Version'|trans }} {{ project.currentVersion }}</p>
+
+    {{ form_start(comments_form) }}
+    {% for page in project.getPagesByVersion(project.selectedVersion) %}
+        <div class="row">
+            <div class="col page-comments-block" data-num="{{ loop.index }}">
+                {% if comments_form.all_comments[loop.index] is defined %}
+                    {{ form(comments_form.all_comments[loop.index]) }}
+                {% endif %}
+            </div>
+            <div class="col">
+                {{ render_page_image(project, loop.index)|raw }}
+            </div>
+        </div>
+    {% endfor %}
+    {{ form_widget(comments_form._token) }}
+    {{ form_end(comments_form) }}
+{% endblock %}

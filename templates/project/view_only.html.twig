@@ -1,19 +1,7 @@
 {% extends 'project/base.html.twig' %}
 
 {% block content %}
-    {% if project_name_form is defined and access_helper.isMainAccess %}
-        {% include 'project/parts/project_name.html.twig' with {
-            'project': project,
-            'form': project_name_form
-        } only %}
-    {% endif %}
-
-    {% if select_version_form is defined and project.currentVersion > 1  and access_helper.canEdit() %}
-        {% include 'project/parts/select_version.html.twig' with {
-            'project': project,
-            'form': select_version_form
-        } only %}
-    {% endif %}
+    <p class="text-center">{{ 'Version'|trans }} {{ project.currentVersion }}</p>
 
     <div class="row">
         <div class="col">
