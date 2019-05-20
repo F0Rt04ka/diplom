@@ -98,7 +98,7 @@ class ProjectRequestHandler extends AbstractController
     public function createLinksConfigForm(Project $project)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('project_links_api', ['identifier' => $project->getIdentifier()]))
+            ->setAction($this->generateUrl('project_link_api', ['identifier' => $project->getIdentifier()]))
             ->setMethod('POST')
             ->add('links', CollectionType::class, [
                 'label' => ' ',

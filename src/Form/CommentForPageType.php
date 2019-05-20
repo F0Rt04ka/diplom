@@ -15,7 +15,7 @@ class CommentForPageType extends AbstractType
         $builder
             ->add('comments', CollectionType::class, [
                 'label' => false,
-                'entry_type' => TextareaType::class,
+                'entry_type' => CommentType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
                 'entry_options' => ['label' => false],

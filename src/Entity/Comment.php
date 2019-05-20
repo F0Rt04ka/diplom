@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CommentsRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
  */
-class Comments
+class Comment
 {
     /**
      * @ORM\Id()
@@ -17,20 +17,29 @@ class Comments
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\ProjectLink", inversedBy="comments", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\ProjectLink", inversedBy="comments", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $projectLink;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="text")
      */
-    private $comments = [];
+    private $text;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isNew = true;
+    private $isNew;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $pageNum;
+    public function __toString()
+    {
+            return $this->text;
+    }
 
     public function getId(): ?int
     {
@@ -42,21 +51,21 @@ class Comments
         return $this->projectLink;
     }
 
-    public function setProjectLink(ProjectLink $projectLink): self
+    public function setProjectLink(?ProjectLink $projectLink): self
     {
         $this->projectLink = $projectLink;
 
         return $this;
     }
 
-    public function getComments(): ?array
+    public function getText(): ?string
     {
-        return $this->comments;
+        return $this->text;
     }
 
-    public function setComments(array $comments): self
+    public function setText(string $text): self
     {
-        $this->comments = $comments;
+        $this->text = $text;
 
         return $this;
     }
@@ -69,6 +78,18 @@ class Comments
     public function setIsNew(bool $isNew): self
     {
         $this->isNew = $isNew;
+
+        return $this;
+    }
+
+    public function getPageNum(): ?int
+    {
+        return $this->pageNum;
+    }
+
+    public function setPageNum(int $pageNum): self
+    {
+        $this->pageNum = $pageNum;
 
         return $this;
     }

@@ -24,3 +24,4 @@ require('bootstrap');
 require('../css/app.css');
 require('./project_edit');
 require('./modal_links_config');
+require('./comments');

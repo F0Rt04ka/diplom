@@ -207,7 +207,7 @@ class Project
     public function getMainProjectLink(): ProjectLink
     {
         return $this->projectLinks->filter(function (ProjectLink $link) {
-            return $link->getAccessLevel() === ProjectLink::ACCESS_LVL_MAIN_LINK;
+            return ($link->getAccessLevel() === ProjectLink::ACCESS_LVL_MAIN_LINK) ? $link : null;
         })->first();
     }
 

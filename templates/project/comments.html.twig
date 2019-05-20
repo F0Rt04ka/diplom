@@ -4,11 +4,12 @@
     <p class="text-center">{{ 'Version'|trans }} {{ project.currentVersion }}</p>
 
     {{ form_start(comments_form) }}
+    {{ form_errors(comments_form) }}
     {% for page in project.getPagesByVersion(project.selectedVersion) %}
         <div class="row">
-            <div class="col page-comments-block" data-num="{{ loop.index }}">
-                {% if comments_form.all_comments[loop.index] is defined %}
-                    {{ form(comments_form.all_comments[loop.index]) }}
+            <div class="col page-comments-block" data-num="{{ loop.index0 }}">
+                {% if comments_form.all_comments[loop.index0] is defined %}
+                    {{ form_widget(comments_form.all_comments[loop.index0]) }}
                 {% endif %}
             </div>
             <div class="col">
@@ -16,6 +17,6 @@
             </div>
         </div>
     {% endfor %}
-    {{ form_widget(comments_form._token) }}
+    {{ form_rest(comments_form) }}
     {{ form_end(comments_form) }}
 {% endblock %}

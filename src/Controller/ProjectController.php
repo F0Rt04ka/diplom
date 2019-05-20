@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Comments;
+use App\Entity\Comment;
 use App\Entity\Project;
 use App\Entity\ProjectLink;
 use App\Form\CommentsType;
+use App\Repository\CommentRepository;
 use App\Repository\ProjectLinkRepository;
 use App\Repository\ProjectRepository;
 use App\Service\AccessHelper;
@@ -14,6 +15,7 @@ use App\Service\ProjectHelper;
 use App\Service\ProjectRequestHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,14 +46,39 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/{identifier}/api/links", name="links_api",
+     * @Route("/{identifier}/api/comment", name="comment_api",
      *     methods={"GET", "POST", "DELETE"},
      *     options = { "expose" = true }
      * )
      * @Entity("project_link", expr="repository.findByIdentifier(identifier)")
      */
-    public function apiLinks(ProjectLink $projectLink, Request $request, ProjectLinkRepository $linkRepository)
-    {
+    public function apiComment(
+        ProjectLink $projectLink,
+        Request $request,
+        CommentRepository $commentsRepository
+    ): JsonResponse {
+        $project = $projectLink->getProject();
+        if ($request->getMethod() === 'GET') {
+            return $this->json([
+                'result' => $commentsRepository->findAllNewComments($project),
+            ]);
+        }
+
+        return $this->json([]);
+    }
+
+    /**
+     * @Route("/{identifier}/api/link", name="link_api",
+     *     methods={"GET", "POST", "DELETE"},
+     *     options = { "expose" = true }
+     * )
+     * @Entity("project_link", expr="repository.findByIdentifier(identifier)")
+     */
+    public function apiLinks(
+        ProjectLink $projectLink,
+        Request $request,
+        ProjectLinkRepository $linkRepository
+    ): JsonResponse {
         $project = $projectLink->getProject();
         if ($request->getMethod() === 'DELETE') {
             if (!$linkIdentifier = $request->get('linkIdentifier')) {
@@ -111,25 +138,29 @@ class ProjectController extends AbstractController
             return $this->editAction($project, $request, $accessHelper->isMainAccess());
         } elseif ($accessHelper->canComment()) {
             $projectLink->getProject()->setCurrentVersion($projectLink->getProjectVersion());
-            if ($projectLink->getComments()) {
-                $existingComments = $projectLink->getComments()->getComments();
-            } else {
-                $emptyCommentsData = ['all_comments' => []];
-                for ($i = 0; $i < $project->getPagesByVersion()->count(); $i++) {
-                    $emptyCommentsData['all_comments'][$i] = ['comments' => []];
-                }
+            $commentsData = ['all_comments' => []];
+            for ($i = 0; $i < $project->getPagesByVersion()->count(); $i++) {
+                $commentsData['all_comments'][$i] = [
+                    'comments' => $projectLink->getCommentsByPageNum($i)->toArray(),
+                ];
             }
-            $commentsForm = $this->createForm(CommentsType::class, $existingComments ?? $emptyCommentsData);
+
+            $commentsForm = $this->createForm(CommentsType::class, $commentsData);
             $commentsForm->handleRequest($request);
             if ($commentsForm->isSubmitted() && $commentsForm->isValid()) {
-                if (!$newComments = $projectLink->getComments()) {
-                    $newComments = new Comments();
-                    $projectLink->setComments($newComments);
+                $entityManager->getRepository(Comment::class)->clearComments($projectLink);
+
+                foreach ($commentsForm->getData()['all_comments'] as $pageNum => $comments) {
+                    /** @var Comment $newComment */
+                    foreach ($comments['comments'] as $newComment) {
+                        $newComment
+                            ->setProjectLink($projectLink)
+                            ->setIsNew(true)
+                            ->setPageNum($pageNum);
+                        $projectLink->addComments($newComment);
+                        $entityManager->getRepository(Comment::class)->customSave($newComment);
+                    }
                 }
-                $newComments->setComments($commentsForm->getData());
-                $newComments->setIsNew(true);
-                $entityManager->merge($newComments);
-                $entityManager->flush();
             }
 
             return $this->render('project/comments.html.twig', [

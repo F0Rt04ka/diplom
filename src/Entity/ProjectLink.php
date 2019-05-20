@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,7 +30,7 @@ class ProjectLink
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="projectLinks")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="projectLinks", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $project;
@@ -49,13 +51,14 @@ class ProjectLink
     private $projectVersion;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Comments", mappedBy="projectLink", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="projectLink", orphanRemoval=true, cascade={"persist"})
      */
     private $comments;
 
     public function __construct(?Project $project = null)
     {
         $this->project = $project;
+        $this->comments = new ArrayCollection();
     }
 
     public function toArray(): array
@@ -121,20 +124,44 @@ class ProjectLink
         return $this;
     }
 
-    public function getComments(): ?Comments
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
     {
         return $this->comments;
     }
 
-    public function setComments(Comments $comments): self
+    public function addComments(Comment $comments1): self
     {
-        $this->comments = $comments;
-
-        // set the owning side of the relation if necessary
-        if ($this !== $comments->getProjectLink()) {
-            $comments->setProjectLink($this);
+        if (!$this->comments->contains($comments1)) {
+            $this->comments[] = $comments1;
+            $comments1->setProjectLink($this);
         }
 
         return $this;
+    }
+
+    public function removeComments(Comment $comments1): self
+    {
+        if ($this->comments->contains($comments1)) {
+            $this->comments->removeElement($comments1);
+            // set the owning side to null (unless already changed)
+            if ($comments1->getProjectLink() === $this) {
+                $comments1->setProjectLink(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getCommentsByPageNum(int $pageNum): Collection
+    {
+        return $this->comments->filter(function (Comment $comment) use ($pageNum) {
+            return $comment->getPageNum() === $pageNum ? $comment : null;
+        });
     }
 }

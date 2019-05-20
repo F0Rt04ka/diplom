@@ -72,6 +72,7 @@ page:
       12: 12pt
 
 project:
+  comments: Комментарии
   version: Версия
   link:
     access_level: Уровень доступа

@@ -9,7 +9,7 @@ function insertRowInTable(linkData)
 
     $('.project-link-delete').click(function () {
         $.ajax({
-            'url': Routing.generate('project_links_api', {'identifier': PROJECT_IDENTIFIER}),
+            'url': Routing.generate('project_link_api', {'identifier': PROJECT_IDENTIFIER}),
             'type': 'DELETE',
             'data': {
                 'linkIdentifier': $(this).data('linkIdentifier')
@@ -43,7 +43,7 @@ $(document).ready(function () {
     $('#project-modal_links-btn'). click(function () {
         $('#modal-links-config').modal();
         $.ajax({
-            'url': Routing.generate('project_links_api', {'identifier': PROJECT_IDENTIFIER}),
+            'url': Routing.generate('project_link_api', {'identifier': PROJECT_IDENTIFIER}),
             'type': 'GET',
             'success': function (data) {
                 $.each(data, function (i, link) {
