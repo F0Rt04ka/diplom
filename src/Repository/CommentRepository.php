@@ -56,4 +56,57 @@ class CommentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    /**
+     * @param Project $project
+     * @return array
+     */
+    public function findProjectLinkWithNewComments(Project $project)
+    {
+//        return $this->_em->createQueryBuilder()
+//            ->select('pl.id')
+//            ->from(ProjectLink::class, 'pl')
+//            ->join(Comment::class, 'c', 'WITH', 'c.projectLink = pl.id')
+//            ->where(
+//                'pl.project = :project_id',
+//                'c.isNew = :is_new',
+//                'pl.accessLevel = :access_level'
+//            )
+//            ->groupBy('pl.id')
+//            ->setParameter('project_id', $project->getId())
+//            ->setParameter('is_new', true)
+//            ->setParameter('access_level', ProjectLink::ACCESS_LVL_COMMENTS)
+//            ->getQuery()
+//            ->getResult();
+        $con = $this->getEntityManager()->getConnection();
+        return $con->executeQuery(
+            'SELECT pl.identifier, pl.project_version
+            FROM project_link pl
+                     JOIN comment c ON pl.id = c.project_link_id
+            WHERE pl.project_id = :project_id
+              AND c.is_new = :is_new
+              AND pl.access_level = :access_level
+            GROUP BY pl.id',
+            [
+                'project_id' => $project->getId(),
+                'is_new' => true,
+                'access_level' => ProjectLink::ACCESS_LVL_COMMENTS,
+            ]
+        )->fetchAll();
+    }
+
+    public function readCommentsOnProjectLink($projectLinkIdentifier)
+    {
+        //TODO: не обновляется статус.
+        $link = $this->getEntityManager()->getRepository(ProjectLink::class)
+            ->findByIdentifier($projectLinkIdentifier);
+        $this->createQueryBuilder('c')
+            ->update()
+            ->set('c.isNew', ':is_new')
+            ->where('c.projectLink=:project_link')
+            ->setParameter('is_new', false)
+            ->setParameter('project_link', $link->getId())
+            ->getQuery()
+            ->execute();
+    }
 }

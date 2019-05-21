@@ -21,7 +21,3 @@ header {
     background-color: #f5f5f5;
     margin-bottom: 10px;
 }
-
-#comments_dropdown_content_empty, #comments_dropdown_content_exist {
-    display: none;
-}

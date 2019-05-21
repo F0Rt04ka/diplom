@@ -47,7 +47,7 @@ class ProjectController extends AbstractController
 
     /**
      * @Route("/{identifier}/api/comment", name="comment_api",
-     *     methods={"GET", "POST", "DELETE"},
+     *     methods={"GET", "PUT"},
      *     options = { "expose" = true }
      * )
      * @Entity("project_link", expr="repository.findByIdentifier(identifier)")
@@ -60,8 +60,10 @@ class ProjectController extends AbstractController
         $project = $projectLink->getProject();
         if ($request->getMethod() === 'GET') {
             return $this->json([
-                'result' => $commentsRepository->findAllNewComments($project),
+                'result' => $commentsRepository->findProjectLinkWithNewComments($project),
             ]);
+        } elseif ($request->getMethod() === 'PUT') {
+            $commentsRepository->readCommentsOnProjectLink($request->get('linkIdentifier'));
         }
 
         return $this->json([]);
@@ -124,7 +126,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/{identifier}", name="view")
+     * @Route("/{identifier}", name="view", options = { "expose" = true })
      * @Entity("project_link", expr="repository.findByIdentifier(identifier)")
      */
     public function view(
