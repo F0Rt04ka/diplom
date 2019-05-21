@@ -86,7 +86,7 @@ class ProjectController extends AbstractController
             }
 
             return $this->json(
-                $linkRepository->deleteByIdentifier($project, $linkIdentifier) ?
+                $linkRepository->deleteByIdentifier($linkIdentifier) ?
                     $linkIdentifier : false
             );
         } elseif ($request->getMethod() === 'GET') {

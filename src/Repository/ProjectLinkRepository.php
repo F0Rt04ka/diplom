@@ -43,18 +43,17 @@ class ProjectLinkRepository extends ServiceEntityRepository
         return $identifier;
     }
 
-    public function deleteByIdentifier(Project $project, string $linkIdentifier)
+    public function deleteByIdentifier(string $linkIdentifier)
     {
-        $qb = $this->createQueryBuilder('pl');
-        return $qb->delete()
-            ->where(
-                $qb->expr()->eq('pl.project', $project->getId()),
-                $qb->expr()->eq('pl.identifier', ':linkIdentifier'),
-                $qb->expr()->in('pl.accessLevel', ':accessLevels')
-            )
-            ->setParameter('linkIdentifier', $linkIdentifier)
-            ->setParameter('accessLevels', ProjectLink::EDITORIAL_ACCESS_LEVELS)
-            ->getQuery()
-            ->getResult();
+        $links = $this->findBy([
+            'identifier' => $linkIdentifier,
+            'accessLevel' => ProjectLink::EDITORIAL_ACCESS_LEVELS
+        ]);
+        foreach ($links as $link) {
+            $this->_em->remove($link);
+        }
+        $this->_em->flush();
+
+        return true;
     }
 }

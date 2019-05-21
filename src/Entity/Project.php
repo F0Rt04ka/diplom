@@ -52,12 +52,12 @@ class Project
     private $selectedVersion;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Page", mappedBy="project", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Page", mappedBy="project", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $pages;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProjectLink", mappedBy="project", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\ProjectLink", mappedBy="project", orphanRemoval=true, cascade={"remove"})
      */
     private $projectLinks;
 

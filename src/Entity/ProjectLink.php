@@ -30,7 +30,7 @@ class ProjectLink
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="projectLinks", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="projectLinks", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $project;
@@ -51,7 +51,12 @@ class ProjectLink
     private $projectVersion;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="projectLink", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(
+     *     targetEntity="App\Entity\Comment",
+     *     mappedBy="projectLink",
+     *     orphanRemoval=true,
+     *     cascade={"persist", "remove"}
+     * )
      */
     private $comments;
 
