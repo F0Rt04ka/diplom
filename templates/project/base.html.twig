@@ -12,15 +12,14 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class="text-center">{{ project.name }}</h1>
+    {% if not access_helper.isMainAccess %}
+        <h1 class="text-center">{{ project.name }}</h1>
+    {% endif %}
 {% block content %}{% endblock %}
 {% endblock %}
 
 {% block footer %}
-    {% if project_links_form is defined and access_helper.isMainAccess() %}
+    {% if project_links_form is defined and access_helper.isMainAccess %}
         {% include 'project/parts/modal_links_config.html.twig' %}
     {% endif %}
-    {% include 'project/parts/buttons_block.html.twig' with {
-        'project': project
-    } only %}
 {% endblock %}

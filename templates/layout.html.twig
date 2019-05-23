@@ -13,35 +13,16 @@
         {% endif %}
     </head>
     <body>
-    <header class="navbar sticky-top navbar-light shadow-sm border-bottom container">
-        <a href="#" class="navbar-brand">Diplom</a>
-        <div class="ml-auto">
-            <div id="comments_dropdown" class="dropdown">
-                <a id="comments_dropdown_view" class="nav-item dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true">{{ 'project.comments'|trans }}</a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="comments_dropdown_view">
-                    <div id="comments_dropdown_spinner" class="text-center">
-                        <div class="spinner-border">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                    <div id="comments_dropdown_content_exist">
-                        <h6 class="dropdown-header">{{ 'label.comments.exist'|trans }}</h6>
-                        <div id="comments_dropdown_content_exist_list">
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <a id="comments_dropdown_read_all_btn" class="dropdown-item">{{ 'label.comments.read_all'|trans }}</a>
-                    </div>
-                    <div id="comments_dropdown_content_empty">
-                        <h6 class="dropdown-header">{{ 'label.comments.empty'|trans }}</h6>
-                    </div>
-                </div>
+        <div class="container-fluid pt-2">
+            <div class="row">
+                {% include 'include/sidebar.html.twig' %}
+
+                <main role="main" class="col-md-auto ml-sm-auto col-lg-10 px-4">
+                {% block body %}{% endblock %}
+                </main>
             </div>
         </div>
-    </header>
-        <div class="container">
 
-            {% block body %}{% endblock %}
-        </div>
         {% block footer %}{% endblock %}
 
         {{ encore_entry_script_tags('app') }}
