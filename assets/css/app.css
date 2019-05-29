@@ -10,11 +10,7 @@
 
 .page-image {
     border: black solid 1px;
-
-    img {
-        height: 100%;
-        width: 100%;
-    }
+    text-align: center;
 }
 
 header {
