@@ -1,11 +1,11 @@
 {#TODO: сделать нормальную работу сайдбара с collapse#}
-<nav class="col-lg-2 d-lg-block bg-light col-md-auto sticky-top position-fixed">
+<nav class="col-lg-2 d-lg-block col-md-auto sticky-top position-fixed pl-4">
     <div class="d-md-block d-lg-none">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="navbarsExample08" aria-expanded="true" aria-label="Toggle navigation">
             <i class="fas fa-th-list"></i>
         </button>
     </div>
-    <div id="sidebar" class="mt-lg-5 mt-md-1">
+    <div id="sidebar" class="pt-lg-5 mt-md-1">
         {% if access_helper.canEdit and not access_helper.isViewVersionPage %}
             <button id="project-save-btn" type="button" class="btn btn-primary btn-lg mb-2">
                 {{ 'button.save.save'|trans }}
