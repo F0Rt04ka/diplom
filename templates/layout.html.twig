@@ -15,11 +15,13 @@
     <body>
         <div class="container-fluid pt-2">
             <div class="row">
-                {% include 'include/sidebar.html.twig' %}
+                {% block main_block %}
+                    {% include 'include/sidebar.html.twig' %}
 
-                <main role="main" class="col-md-auto ml-sm-auto col-lg-10 px-4">
-                {% block body %}{% endblock %}
-                </main>
+                    <main role="main" class="col-md-auto ml-sm-auto col-lg-10 px-4">
+                    {% block body %}{% endblock %}
+                    </main>
+                {% endblock %}
             </div>
         </div>
 

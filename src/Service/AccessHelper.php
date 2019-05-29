@@ -59,7 +59,7 @@ class AccessHelper
         return in_array($this->accessLevel, [ProjectLink::ACCESS_LVL_COMMENTS], true);
     }
 
-    public function getIdentifier(): string
+    public function getIdentifier(): ?string
     {
         return $this->identifier;
     }

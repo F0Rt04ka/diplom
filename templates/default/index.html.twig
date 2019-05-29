@@ -1,8 +1,8 @@
 {% extends 'layout.html.twig' %}
 {% form_theme project_form 'bootstrap_4_layout.html.twig' %}
 
-{% block body %}
-<div class="row">
+{% block main_block %}
+<div class="row ml-auto mr-auto mt-5">
     <div class="col card text-center text-white bg-primary" style="margin-right: 20px; margin-left: 20px;">
         <div class="card-header"><h1>{{ 'Existing project'|trans }}</h1></div>
         {{ form_start(find_project_form) }}
