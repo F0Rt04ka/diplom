@@ -21,7 +21,8 @@ window.Routing = Routing;
 
 require('jquery-form');
 require('bootstrap');
-require('../css/app.css');
 require('./project_edit');
 require('./modal_links_config');
 require('./comments');
+
+require('../css/app.less');

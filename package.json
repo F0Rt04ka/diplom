@@ -1,6 +1,8 @@
 {
     "devDependencies": {
         "@symfony/webpack-encore": "^0.22.0",
+        "autoprefixer": "^9.5.1",
+        "postcss-loader": "^3.0.0",
         "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",
@@ -16,6 +18,14 @@
         "ckeditor": "^4.0.0",
         "jquery": "^3.3.1",
         "jquery-form": "jquery-form/form",
+        "less": "^3.9.0",
+        "less-loader": "^5.0.0",
         "popper.js": "^1.14.5"
-    }
+    },
+    "browserslist": [
+        "> 0.5%",
+        "last 2 versions",
+        "Firefox ESR",
+        "not dead"
+    ]
 }
