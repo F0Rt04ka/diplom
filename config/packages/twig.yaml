@@ -2,6 +2,9 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
-    form_themes: ['bootstrap_4_layout.html.twig', 'collection_theme.html.twig']
+    form_themes:
+        - 'bootstrap_4_layout.html.twig'
+        - 'themes/collection.html.twig'
+        - 'themes/work_project_main_page_form.html.twig'
     globals:
         access_helper: '@App\Service\AccessHelper'

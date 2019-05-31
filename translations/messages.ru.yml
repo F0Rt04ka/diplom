@@ -71,6 +71,23 @@ page:
       11: 11pt
       12: 12pt
 
+page.main:
+  fio: ФИО
+  headers: Заглавие
+  approver: Утверждающий
+  approver_rank: Звание
+  date: Дата
+  date_day: День
+  date_month: Месяц
+  date_year: Год
+  title: Заголовок
+  discipline: Название дисциплины
+  subtitles: Подзаголовки
+  faculty: Факультет
+  cathedra: Кафедра
+  developer: Разработчик
+  footer: Подвал
+
 project:
   comments: Комментарии
   version: Версия
@@ -105,6 +122,8 @@ button:
     links: Добавить ссылку
     comments: Добавить комментарий
     pages: Добавить страницу
+    headers: Добавить строку заглавия
+    subtitles: Добавить подзаголовок
 
 label:
   delete:

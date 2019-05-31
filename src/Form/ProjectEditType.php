@@ -32,6 +32,7 @@ class ProjectEditType extends AbstractType implements DataMapperInterface
                     case Project::TYPE_CV:
                         $form->add('main_page', CVPageType::class);
                         break;
+
                     case Project::TYPE_DEFAULT:
                         $form
                             ->add('main_page', MainPageType::class)
@@ -44,6 +45,11 @@ class ProjectEditType extends AbstractType implements DataMapperInterface
                         ;
                         break;
 
+                    case Project::TYPE_WORK_PROJECT:
+                        $form
+                            ->add('main_page', Page\WorkProject\MainPageType::class)
+                        ;
+                        break;
                 }
             })
             ->setDataMapper($this)
