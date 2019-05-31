@@ -15,10 +15,13 @@ class Project
 {
     const TYPE_DEFAULT = 'default';
     const TYPE_CV      = 'cv';
+    const TYPE_WORK_PROJECT = 'work_project';
+
     const TYPES = [
         self::TYPE_DEFAULT,
         self::TYPE_CV,
-        ];
+        self::TYPE_WORK_PROJECT,
+    ];
 
     /**
      * @ORM\Id()
@@ -250,5 +253,19 @@ class Project
         }
 
         return $this;
+    }
+
+    public static function getTypesForChoices($addEmptyChoice = true): array
+    {
+        $choices = [];
+        if ($addEmptyChoice) {
+            $choices[''] = '';
+        }
+
+        foreach (self::TYPES as $type) {
+            $choices["project.types.$type"] = $type;
+        }
+
+        return $choices;
     }
 }

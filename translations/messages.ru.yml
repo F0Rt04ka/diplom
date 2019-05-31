@@ -81,6 +81,11 @@ project:
       edit: Редактирование
       comments: Комментирование
       view_only: Только просмотр
+  types:
+    default: Другое
+    cv: Резюме
+    work_project: Рабочая программа
+
 
 button:
   close: Закрыть

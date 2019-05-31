@@ -15,11 +15,7 @@ class CreateProjectType extends AbstractType
         $builder
             ->add('name')
             ->add('type', ChoiceType::class, [
-                'choices' => [
-                    '' => '',
-                    'Default' => Project::TYPE_DEFAULT,
-                    'CV'      => Project::TYPE_CV,
-                ],
+                'choices' => Project::getTypesForChoices(),
             ])
         ;
     }
