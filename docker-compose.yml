@@ -11,35 +11,13 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: qwerty
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    links:
-      - mariadb:db
-    ports:
-      - 8765:80
-    environment:
-      MYSQL_ROOT_PASSWORD: diplom
-    depends_on:
-      - mariadb
-
-#services:
-#    php:
-#        build: ./docker/php-fpm
-#        ports:
-#            - "9000:9000"
-#        volumes:
-#            - ./:/var/www/symfony:cached
-#            - ./var/logs:/var/www/symfony/var/logs:cached
-#        links:
-#            - db
-#        extra_hosts:
-#            - "docker.host:127.0.0.1"
-#    nginx:
-#        build: ./docker/nginx
-#        ports:
-#            - "8080:80"
-#        links:
-#            - php
-#        volumes:
-#            - ./var/logs/nginx:/var/log/nginx:cached
-#            - ./:/var/www/symfony:cached
+#  phpmyadmin:
+#    image: phpmyadmin/phpmyadmin
+#    links:
+#      - mariadb:db
+#    ports:
+#      - 8765:80
+#    environment:
+#      MYSQL_ROOT_PASSWORD: diplom
+#    depends_on:
+#      - mariadb
