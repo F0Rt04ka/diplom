@@ -2,6 +2,7 @@
 
 namespace App\Form\Page\WorkProject;
 
+use App\Entity\WorkProject\MainPage;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -42,12 +43,14 @@ class MainPageType extends AbstractType
                 'constraints' => [
                     new NotNull(),
                 ],
+                'empty_data' => '',
             ])
             ->add('discipline', TextType::class, [
                 'label' => 'page.main.discipline',
                 'constraints' => [
                     new NotNull(),
                 ],
+                'empty_data' => '',
             ])
             ->add('subtitles', CollectionType::class, [
                 'label' => 'page.main.subtitles',
@@ -61,24 +64,28 @@ class MainPageType extends AbstractType
                 'constraints' => [
                     new Length(['max' => 15]),
                 ],
+                'empty_data' => '',
             ])
             ->add('cathedra', TextType::class, [
                 'label' => 'page.main.cathedra',
                 'constraints' => [
                     new Length(['max' => 20]),
                 ],
+                'empty_data' => '',
             ])
             ->add('developer', TextType::class, [
                 'label' => 'page.main.developer',
                 'constraints' => [
                     new Length(['max' => 100]),
                 ],
+                'empty_data' => '',
             ])
             ->add('footer', TextType::class, [
                 'label' => 'page.main.footer',
                 'constraints' => [
                     new NotNull(),
                 ],
+                'empty_data' => '',
             ])
         ;
     }
@@ -86,6 +93,7 @@ class MainPageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'data_class' => MainPage::class,
         ]);
     }
 }

@@ -1,0 +1,68 @@
+{# @var page \App\Entity\WorkProject\MainPage #}
+\begin{titlepage}
+  \begin{center}
+    {% for header_line in page.headers %}
+        {{ header_line }} \\
+    {% endfor %}
+
+    \medskip
+    \begin{large}
+    \begin{flushright}
+		\begin{minipage}{0.3\textwidth}
+			\begin{flushright}
+	    		УТВЕРЖДАЮ\\
+	    		\vspace{0.1cm}
+                {{ page.approverRank }} \\
+			\end{flushright}
+		\end{minipage}
+		\smallskip \\
+		\underline{\hspace{3cm}} {{ page.approverFio }} \\
+		\smallskip \\
+		«{{ '\\underline{'~(page.dateDay is empty ? '\\hspace{0.7cm}' : page.dateDay)~'}' }}»
+        {{ '\\underline{'~(page.dateMonth is empty ? '\\hspace{2cm}' : page.dateMonth)~'}' }} }
+        201{{ '\\underline{'~(page.dateYear is empty ? '\\hspace{0.3cm}' : page.dateYear)~'}' }} г.\\
+	\end{flushright}
+    \end{large}
+
+
+	\bigskip
+
+    \textbf{\Large{ {{ page.title|upper }} }}
+    \smallskip \\
+    по дисциплине \textbf{«{{ page.discipline }}»} \\
+    {% for subtitle_line in page.subtitles %}
+        {{ subtitle_line }} \\
+    {% endfor %}
+\end{center}
+
+\smallskip \smallskip \vfill
+
+\begin{flushleft}
+	\begin{minipage}{15cm}
+		\textbf{Факультет} {{ '\underline{'~(page.faculty is empty ? '\\hspace{1cm}' : page.faculty)~'}' }} \\
+		\textbf{Кафедра} {{ '\\underline{'~(page.cathedra is empty ? '\\hspace{3cm}' : page.cathedra)~'}' }} \\
+		\textbf{Разработчик} {{ page.developer is empty ? '\\hrulefill' : '\\underline{'~page.developer~'}' }} \\
+		\smallskip
+		\hspace{2.8cm} \tiny{(УЧЕНАЯ СТЕПЕНЬ, ЗВАНИЕ, ФИО полностью)} \\
+	\end{minipage}
+\end{flushleft}
+
+\medskip
+
+\begin{flushright}
+\begin{minipage}{3.5cm}
+	\begin{center}
+		\hrulefill \\
+		\tiny{(ПОДПИСЬ)} \\
+	\end{center}
+\end{minipage}
+\end{flushright}
+
+\bigskip
+\vfill
+
+\begin{center}
+  {{ page.footer }}
+\end{center}
+
+\end{titlepage}

@@ -157,7 +157,13 @@ class Project
 
     public function getMainPage(?int $version = null): ?Page
     {
-        $mainPageClass = $this->getType() === self::TYPE_CV ? CVMainPage::class : MainPage::class;
+        $mainPageClassMap = [
+            self::TYPE_DEFAULT => MainPage::class,
+            self::TYPE_CV => CVMainPage::class,
+            self::TYPE_WORK_PROJECT => \App\Entity\WorkProject\MainPage::class,
+        ];
+
+        $mainPageClass = $mainPageClassMap[$this->getType()];
         $mainPage = $this->getPagesByType($mainPageClass, $version)->first();
 
         return  $mainPage ? $mainPage : null;

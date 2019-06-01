@@ -12,13 +12,13 @@
 {% block _project_edit_main_page_date_block_widget %}
     <div class="row">
         <div class="col-3">
-            {{ form_row(form.day) }}
+            {{ form_row(form.day, {'type': 'number'}) }}
         </div>
         <div class="col-6">
             {{ form_row(form.month) }}
         </div>
         <div class="col-3">
-            {{ form_row(form.year) }}
+            {{ form_row(form.year, {'type': 'number'}) }}
         </div>
     </div>
 {% endblock %}
