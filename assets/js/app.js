@@ -24,5 +24,6 @@ require('bootstrap');
 require('./project_edit');
 require('./modal_links_config');
 require('./comments');
+require('./table_block');
 
 require('../css/app.less');

@@ -1,0 +1,58 @@
+{% block table_block_widget %}
+    {% set columnsData = json_decode(form.columns.vars.value) %}
+    {% set cellsData = json_decode(form.cells.vars.value) %}
+    {% set multiline_cell_prototype %}
+        <td><textarea data-row-num="%row_num%" data-col-num="%col_num%" class="form-control">%value%</textarea></td>
+    {% endset %}
+    {% set single_line_cell_prototype %}
+        <td><input data-row-num="%row_num%" data-col-num="%col_num%" class="form-control" type="text" value="%value%"></td>
+    {% endset %}
+    <div id="{{ id }}">
+        <div class="row ml-0 mr-0">
+            <div id="{{ id~'-content' }}" class="col-11 row ml-0 mr-0 pl-0 pr-0">
+                <input id="{{ id~'-columns' }}" name="{{ full_name }}[columns]" type="hidden" value="{{ form.columns.vars.value|escape }}">
+                <input id="{{ id~'-cells' }}" name="{{ full_name }}[cells]" type="hidden" value="{{ form.cells.vars.value|escape }}">
+                <table class="table table-borderless">
+                    <thead>
+                    <tr>
+                        {% for columnData in columnsData %}
+                            <th>{{ columnData.name }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for rowNum in cellsData|keys %}
+                        <tr>
+                            {% for colNum in cellsData[rowNum]|keys %}
+                                {{ (columnsData[colNum].text_size == 'single_line' ? single_line_cell_prototype : multiline_cell_prototype)|replace({'%row_num%': rowNum, '%colNum%': colNum, '%value%': cellsData[rowNum][colNum]})|raw }}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-1">
+                <a class="table_block-btn_add_column" title="{{ 'button.add.column'|trans }}"
+                   data-toggle="modal"
+                   data-target="#table_block-modal_add_column"
+                   data-block-id="{{ id }}"
+                   data-block-name="{{ full_name }}"
+                >
+                    <i class="fas fa-plus-circle fa-2x"></i>
+                </a>
+            </div>
+        </div>
+        <div class="pl-4 pt-3">
+            <a class="table_block-btn_add_row" title="{{ 'button.add.row'|trans }}"
+               data-block-id="{{ id }}"
+               data-block-name="{{ full_name }}"
+               data-prototype-cell_multiline="{{ multiline_cell_prototype|replace({'%value%': ''})|escape }}"
+               data-prototype-cell_single_line="{{ single_line_cell_prototype|replace({'%value%': ''})|escape }}"
+               onclick="handleTableAddRowBtn(this)"
+            >
+
+                <i class="fas fa-plus-circle fa-2x"></i>
+            </a>
+        </div>
+    </div>
+{% endblock %}

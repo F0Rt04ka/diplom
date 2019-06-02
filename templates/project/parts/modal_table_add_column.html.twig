@@ -1,0 +1,64 @@
+<div class="modal fade" id="table_block-modal_add_column" tabindex="-1" role="dialog" aria-labelledby="table_block-modal_label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="table_block-modal_label">{{ 'page.table.modal.main_label.add_column'|trans }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'button.close'|trans }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="table_block-modal_add_column_field_column_name" class="col-form-label">
+                        {{ 'page.table.modal.column_name'|trans }}
+                    </label>
+                    <input id="table_block-modal_add_column_field_column_name" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="table_block-modal_add_column_field_width" class="col-form-label">
+                        {{ 'page.table.modal.column_width'|trans }}
+                    </label>
+                    <input id="table_block-modal_add_column_field_width" type="number" class="form-control" min="0" max="5">
+                </div>
+                <div class="form-group">
+                    <label for="table_block-modal_add_column_field_text_align">{{ 'page.table.modal.text_align'|trans }}</label>
+                    <select id="table_block-modal_add_column_field_text_align" class="form-control">
+                        {% for text_align in constant('App\\Entity\\WorkProgram\\TablePage::TEXT_ALIGNS') %}
+                            <option value="{{ text_align }}">
+                                {{ ('page.table.modal.text_aligns.'~text_align)|trans }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="table_block-modal_add_column_field_text_size">{{ 'page.table.modal.text_size'|trans }}</label>
+                    <select id="table_block-modal_add_column_field_text_size" class="form-control">
+                        {% for text_size in constant('App\\Entity\\WorkProgram\\TablePage::TEXT_SIZES') %}
+                            <option value="{{ text_size }}">
+                                {{ ('page.table.modal.text_sizes.'~text_size)|trans }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="table_block-modal_add_column_field_text_orientation">{{ 'page.table.modal.text_orientation'|trans }}</label>
+                    <select id="table_block-modal_add_column_field_text_orientation" class="form-control">
+                        {% for text_orientation in constant('App\\Entity\\WorkProgram\\TablePage::TEXT_ORIENTATIONS') %}
+                            <option value="{{ text_orientation }}">
+                                {{ ('page.table.modal.text_orientations.'~text_orientation)|trans }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <input id="table_block-modal_add_column_data_blockId" type="hidden">
+                <input id="table_block-modal_add_column_data_blockName" type="hidden">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'button.close'|trans }}</button>
+                <button id="table_block-modal_btn_add_column" type="submit" class="btn btn-primary">
+                    {{ 'button.add.column'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\EmptyPage;
 use App\Entity\Page;
+use App\Entity\Project;
+use App\Entity\WorkProgram\TablePage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -28,6 +31,28 @@ class PageRepository extends ServiceEntityRepository
                 $qb->expr()->eq('page.version', $version)
             );
         $qb->getQuery()->getResult();
+    }
+
+    public function getNotMainPagesForProjectByVersion(Project $project, ?int $version = null)
+    {
+        if (empty($version)) {
+            $version = $project->getCurrentVersion();
+        }
+
+        $qb = $this->createQueryBuilder('p');
+        return $qb
+            ->where(
+                'p.project=:projectId',
+                'p.version=:version',
+                $qb->expr()->orX(
+                    $qb->expr()->isInstanceOf('p', TablePage::class),
+                    $qb->expr()->isInstanceOf('p', EmptyPage::class)
+                )
+            )
+            ->setParameter('projectId', $project->getId())
+            ->setParameter('version', $version)
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

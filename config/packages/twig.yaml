@@ -6,5 +6,6 @@ twig:
         - 'bootstrap_4_layout.html.twig'
         - 'themes/collection.html.twig'
         - 'themes/work_program_main_page_form.html.twig'
+        - 'themes/table_block_field.html.twig'
     globals:
         access_helper: '@App\Service\AccessHelper'

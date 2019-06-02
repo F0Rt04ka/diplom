@@ -12,7 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  *     "main" = "MainPage",
  *     "empty" = "EmptyPage",
  *     "cv" = "CVMainPage",
- *     "work_program" = "\App\Entity\WorkProgram\MainPage"
+ *     "work_program" = "\App\Entity\WorkProgram\MainPage",
+ *     "table" = "\App\Entity\WorkProgram\TablePage"
  * })
  */
 abstract class Page

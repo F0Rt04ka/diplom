@@ -22,4 +22,7 @@
     {% if project_links_form is defined and access_helper.isMainAccess %}
         {% include 'project/parts/modal_links_config.html.twig' %}
     {% endif %}
+    {% if access_helper.canEdit %}
+        {% include 'project/parts/modal_table_add_column.html.twig' %}
+    {% endif %}
 {% endblock %}

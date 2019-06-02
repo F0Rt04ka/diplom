@@ -30,7 +30,7 @@ class ProjectLink
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="projectLinks", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="projectLinks", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $project;

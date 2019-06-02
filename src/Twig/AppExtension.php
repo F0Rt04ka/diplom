@@ -15,6 +15,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction('render_page_image', [$this, 'renderPageImage']),
+            new TwigFunction('json_decode', [$this, 'jsonDecode']),
         ];
     }
 
@@ -38,6 +39,15 @@ HTML;
         $htmlConverter = new HtmlConverter(['strip_tags' => true]);
         $md = $htmlConverter->convert($htmlText);
         return (new Markdown())->parse($md);
+    }
+
+    public function jsonDecode(?string $data)
+    {
+        if (empty($data)) {
+            return [];
+        }
+
+        return json_decode($data);
     }
 
 }

@@ -4,6 +4,8 @@ namespace App\Service;
 
 use App\Entity\EmptyPage;
 use App\Entity\Project;
+use App\Entity\WorkProgram\TablePage;
+use App\Repository\PageRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -11,42 +13,37 @@ use Twig\Environment;
 
 class LatexHelper
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $latexOutputDir;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $latexPathToBin;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $latexPathToDviPngBin;
-    /**
-     * @var string
-     */
+
+    /** @var string */
     private $latexPathToDviPdfBin;
 
-    /**
-     * @var Environment
-     */
+    /** @var Environment  */
     private $twig;
 
-    /**
-     * @var ProjectFilesHelper
-     */
+    /** @var ProjectFilesHelper  */
     private $projectFilesHelper;
+
+    /** @var PageRepository */
+    private $pageRepository;
 
     public function __construct(
         Environment $twig,
         ParameterBagInterface $params,
-        ProjectFilesHelper $projectFilesHelper
+        ProjectFilesHelper $projectFilesHelper,
+        PageRepository $pageRepository
     ) {
         $this->twig = $twig;
         $this->projectFilesHelper = $projectFilesHelper;
+        $this->pageRepository = $pageRepository;
+
         $latexParams = $params->get('latex');
         $this->latexOutputDir = $latexParams['output_dir'];
         $this->latexPathToBin = $latexParams['latex_bin'];
@@ -86,6 +83,7 @@ class LatexHelper
     {
         $renderData = [
             'main_page' => $project->getMainPage(),
+            'pages' => $project->getPagesByType(TablePage::class),
         ];
 
         if ($project->getType() === Project::TYPE_DEFAULT) {

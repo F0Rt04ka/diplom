@@ -1,0 +1,36 @@
+{# @var page \App\Entity\WorkProgram\TablePage #}
+\begin{center}
+\begin{minipage}{14cm}
+\begin{center}
+    \textbf{ {{ page.title }} }
+\end{center}
+\end{minipage}
+\end{center}
+
+{{ page.textBeforeTable }}
+{% set columnsData = page.tableBlockColumnsData %}
+{% set columnsDataStr = '' %}
+{% for colInfo in columnsData %}
+    {% if loop.first %}
+        {% set columnsDataStr = columnsDataStr~'{|' %}
+    {% endif %}
+    {% set columnsDataStr = columnsDataStr~('X['~colInfo.width~','~(colInfo.text_align|first))~']|' %}
+    {% if loop.last %}
+        {% set columnsDataStr = columnsDataStr~'}' %}
+    {% endif %}
+{% endfor %}
+\begin{longtabu}{{ columnsDataStr }}
+\hline
+{% for colInfo in columnsData %}
+    {{ (colInfo.name~(loop.last ? ' \\\\' : ' & '))|raw }}
+{% endfor %}
+\hline
+{% for row in page.tableBlockCellsData %}
+    {% for cell in row %}
+        {{ (cell~(loop.last ? ' \\\\' : ' & '))|raw }}
+    {% endfor %}
+    \hline
+{% endfor %}
+\end{longtabu}
+
+{{ page.commentToTable }} \\

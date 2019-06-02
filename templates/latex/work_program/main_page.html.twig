@@ -17,18 +17,17 @@
 		\end{minipage}
 		\smallskip \\
 		\underline{\hspace{3cm}} {{ page.approverFio }} \\
-		\smallskip \\
+		\smallskip
 		«{{ '\\underline{'~(page.dateDay is empty ? '\\hspace{0.7cm}' : page.dateDay)~'}' }}»
-        {{ '\\underline{'~(page.dateMonth is empty ? '\\hspace{2cm}' : page.dateMonth)~'}' }} }
+        {{ '\\underline{'~(page.dateMonth is empty ? '\\hspace{2cm}' : page.dateMonth)~'}' }}
         201{{ '\\underline{'~(page.dateYear is empty ? '\\hspace{0.3cm}' : page.dateYear)~'}' }} г.\\
 	\end{flushright}
     \end{large}
 
-
 	\bigskip
 
-    \textbf{\Large{ {{ page.title|upper }} }}
-    \smallskip \\
+    \textbf{\Large{ {{ page.title|upper }} }} \\
+    \smallskip
     по дисциплине \large{\textbf{«{{ page.discipline }}»}} \\
     {% for subtitle_line in page.subtitles %}
         {{ subtitle_line }} \\

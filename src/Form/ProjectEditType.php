@@ -8,6 +8,8 @@ use App\Entity\Project;
 use App\Form\Page\CVPageType;
 use App\Form\Page\EmptyPageType;
 use App\Form\Page\MainPageType;
+use App\Form\Page\WorkProgram\TablePageType;
+use App\Repository\PageRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -20,6 +22,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProjectEditType extends AbstractType implements DataMapperInterface
 {
+    /** @var PageRepository */
+    private $pageRepository;
+
+    public function __construct(PageRepository $pageRepository)
+    {
+        $this->pageRepository = $pageRepository;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -48,6 +58,11 @@ class ProjectEditType extends AbstractType implements DataMapperInterface
                     case Project::TYPE_WORK_PROGRAM:
                         $form
                             ->add('main_page', Page\WorkProgram\MainPageType::class)
+                            ->add('pages', CollectionType::class, [
+                                'entry_type' => TablePageType::class,
+                                'allow_add' => true,
+                                'allow_delete' => true,
+                            ])
                         ;
                         break;
                 }
@@ -77,7 +92,7 @@ class ProjectEditType extends AbstractType implements DataMapperInterface
         $forms['main_page']->setData($data->getMainPage($data->getSelectedVersion()));
         if (array_key_exists('pages', $forms)) {
             $forms['pages']->setData(
-                $data->getPagesByType(EmptyPage::class, $data->getSelectedVersion())
+                $this->pageRepository->getNotMainPagesForProjectByVersion($data)
             );
         }
     }

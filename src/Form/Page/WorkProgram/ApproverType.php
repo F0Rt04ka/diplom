@@ -17,9 +17,6 @@ class ApproverType extends AbstractType
                 'constraints' => [
                     new Length(['max' => 45]),
                 ],
-                'attr' => [
-                    'class' => 'col',
-                ]
 
             ])
             ->add('fio', TextType::class, [

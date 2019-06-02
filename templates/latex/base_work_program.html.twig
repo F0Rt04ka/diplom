@@ -1,11 +1,11 @@
-%% -*- coding: utf-8 -*-
-\documentclass[12pt,a4paper]{scrartcl} 
+\documentclass[12pt,a4paper]{scrartcl}
 \usepackage[utf8]{inputenc}
 \usepackage[english,russian]{babel}
 \usepackage{indentfirst}
 \usepackage{misccorr}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{longtable, tabu}
 \usepackage[top=10mm, left=10mm, right=10mm, bottom=25mm]{geometry}
 
 \smallskipamount=0.25cm
@@ -13,5 +13,10 @@
 \bigskipamount=2.25cm
 
 \begin{document}
-{% include 'latex/work_program/main_page.html.twig' with {'page': main_page} %}
+{% include 'latex/work_program/main_page.html.twig' with {'page': main_page} only %}
+\newpage
+{% for page in pages %}
+{% include 'latex/work_program/table_page.html.twig' with {'page': page} only %}
+{% endfor %}
+
 \end{document}

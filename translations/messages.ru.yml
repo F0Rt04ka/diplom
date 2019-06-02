@@ -88,6 +88,29 @@ page.main:
   developer: Разработчик
   footer: Подвал
 
+page.table:
+  text_before_table: Текст перед таблицей
+  table_block: Таблица
+  comment_to_table: Комментарий к таблице
+
+page.table.modal:
+  main_label.add_column: Добавление нового столбца
+  column_name: Название столбца
+  column_width: Ширина столбца
+  text_orientation: Ориентация текста для названия столбца
+  text_orientations:
+    default: Обычная
+    vertical: Вертикальная
+  text_size: Длина текста
+  text_sizes:
+    single_line: Однострочный
+    multiline: Многострочный
+  text_align: Выравнивание текста
+  text_aligns:
+    left: По левому краю
+    right: По правому краю
+    center: По центру
+
 project:
   comments: Комментарии
   version: Версия
@@ -124,6 +147,8 @@ button:
     pages: Добавить страницу
     headers: Добавить строку заглавия
     subtitles: Добавить подзаголовок
+    column: Добавить столбец
+    row: Добавить строку
 
 label:
   delete:
@@ -133,6 +158,8 @@ label:
     sections: Удалить секцию
     items: Удалить пункт
     pages: Удалить страницу
+    headers: Удалить строку
+    subtitles: Удалить строку
   comments:
     empty: Нет новых комментариев
     exist: Новые комментарии
