@@ -101,7 +101,7 @@ project:
   types:
     default: Другое
     cv: Резюме
-    work_project: Рабочая программа
+    work_program: Рабочая программа
 
 
 button:

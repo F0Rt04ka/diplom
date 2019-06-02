@@ -5,6 +5,6 @@ twig:
     form_themes:
         - 'bootstrap_4_layout.html.twig'
         - 'themes/collection.html.twig'
-        - 'themes/work_project_main_page_form.html.twig'
+        - 'themes/work_program_main_page_form.html.twig'
     globals:
         access_helper: '@App\Service\AccessHelper'

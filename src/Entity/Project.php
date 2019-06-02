@@ -15,12 +15,12 @@ class Project
 {
     const TYPE_DEFAULT = 'default';
     const TYPE_CV      = 'cv';
-    const TYPE_WORK_PROJECT = 'work_project';
+    const TYPE_WORK_PROGRAM = 'work_program';
 
     const TYPES = [
         self::TYPE_DEFAULT,
         self::TYPE_CV,
-        self::TYPE_WORK_PROJECT,
+        self::TYPE_WORK_PROGRAM,
     ];
 
     /**
@@ -160,7 +160,7 @@ class Project
         $mainPageClassMap = [
             self::TYPE_DEFAULT => MainPage::class,
             self::TYPE_CV => CVMainPage::class,
-            self::TYPE_WORK_PROJECT => \App\Entity\WorkProject\MainPage::class,
+            self::TYPE_WORK_PROGRAM => \App\Entity\WorkProgram\MainPage::class,
         ];
 
         $mainPageClass = $mainPageClassMap[$this->getType()];

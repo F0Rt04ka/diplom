@@ -1,4 +1,4 @@
-{# @var page \App\Entity\WorkProject\MainPage #}
+{# @var page \App\Entity\WorkProgram\MainPage #}
 \begin{titlepage}
   \begin{center}
     {% for header_line in page.headers %}
@@ -39,7 +39,7 @@
 
 \begin{flushleft}
 	\begin{minipage}{15cm}
-		\textbf{Факультет} {{ '\underline{'~(page.faculty is empty ? '\\hspace{1cm}' : page.faculty)~'}' }} \\
+		\textbf{Факультет} {{ '\\underline{'~(page.faculty is empty ? '\\hspace{1cm}' : page.faculty)~'}' }} \\
 		\textbf{Кафедра} {{ '\\underline{'~(page.cathedra is empty ? '\\hspace{3cm}' : page.cathedra)~'}' }} \\
 		\textbf{Разработчик} {{ page.developer is empty ? '\\hrulefill' : '\\underline{'~page.developer~'}' }} \\
 		\smallskip

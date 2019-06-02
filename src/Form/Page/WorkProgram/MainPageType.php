@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Form\Page\WorkProject;
+namespace App\Form\Page\WorkProgram;
 
-use App\Entity\WorkProject\MainPage;
+use App\Entity\WorkProgram\MainPage;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

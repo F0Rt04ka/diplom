@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form\Page\WorkProject;
+namespace App\Form\Page\WorkProgram;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

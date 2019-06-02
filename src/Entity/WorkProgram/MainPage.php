@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Entity\WorkProject;
+namespace App\Entity\WorkProgram;
 
 use App\Entity\Page;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\WorkProject\MainPageRepository")
+ * @ORM\Entity()
  * @ORM\Table("main_page_wp")
  */
 class MainPage extends Page

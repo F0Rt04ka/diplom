@@ -45,9 +45,9 @@ class ProjectEditType extends AbstractType implements DataMapperInterface
                         ;
                         break;
 
-                    case Project::TYPE_WORK_PROJECT:
+                    case Project::TYPE_WORK_PROGRAM:
                         $form
-                            ->add('main_page', Page\WorkProject\MainPageType::class)
+                            ->add('main_page', Page\WorkProgram\MainPageType::class)
                         ;
                         break;
                 }
