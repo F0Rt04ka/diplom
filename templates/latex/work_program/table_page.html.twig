@@ -7,7 +7,7 @@
 \end{minipage}
 \end{center}
 
-{{ page.textBeforeTable }}
+{{ page.textBeforeTable|parse_to_latex }}
 {% set columnsData = page.tableBlockColumnsData %}
 {% set columnsDataStr = '' %}
 {% for colInfo in columnsData %}

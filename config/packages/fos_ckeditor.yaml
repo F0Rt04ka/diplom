@@ -12,6 +12,8 @@ fos_ck_editor:
     configs:
         page_config:
             toolbar: "page_toolbar"
+        inline_config:
+            toolbar: inline_toolbar
     toolbars:
         configs:
             page_toolbar:
@@ -24,5 +26,12 @@ fos_ck_editor:
                 - '@full.paragraph'
                 - '@full.links'
                 - '@full.insert'
-#        items:
-#            full.clipboard: ['PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']
+
+            inline_toolbar:
+                - ['Bold', 'Italic', 'Underline']
+                - '-'
+                - ['RemoveFormat']
+                - '-'
+                - ['JustifyLeft', 'JustifyCenter', 'JustifyRight']
+                - '-'
+                - ['Undo', 'Redo']

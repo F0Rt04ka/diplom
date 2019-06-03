@@ -3,6 +3,7 @@
 namespace App\Form\Page\WorkProgram;
 
 use App\Entity\WorkProgram\TablePage;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,9 +19,11 @@ class TablePageType extends AbstractType
                 'label' => 'page.main.title',
                 'empty_data' => '',
             ])
-            ->add('textBeforeTable', TextareaType::class, [
+            ->add('textBeforeTable', CKEditorType::class, [
                 'label' => 'page.table.text_before_table',
+                'config_name' => 'inline_config',
                 'empty_data' => '',
+                'inline' => true,
             ])
             ->add('tableBlock', TableBlockType::class, [
                 'label' => 'page.table.table_block',
