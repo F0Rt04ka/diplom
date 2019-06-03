@@ -15,7 +15,7 @@
         "symfony/asset": "*",
         "symfony/console": "*",
         "symfony/expression-language": "*",
-        "symfony/filesystem": "4.1.*",
+        "symfony/filesystem": "*",
         "symfony/flex": "^1.1",
         "symfony/form": "*",
         "symfony/framework-bundle": "*",
@@ -30,7 +30,7 @@
         "symfony/web-link": "*",
         "symfony/webpack-encore-bundle": "^1.1",
         "symfony/yaml": "*",
-        "twbs/bootstrap": "4.1.3"
+        "twbs/bootstrap": "^4.3"
     },
     "require-dev": {
         "symfony/debug-pack": "*",
@@ -84,7 +84,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "4.1.*"
+            "require": "4.*"
         }
     }
 }
