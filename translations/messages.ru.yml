@@ -73,7 +73,7 @@ page:
 
 page.main:
   fio: ФИО
-  headers: Заглавие
+  header: Заглавие
   approver: Утверждающий
   approver_rank: Звание
   date: Дата
@@ -82,7 +82,7 @@ page.main:
   date_year: Год
   title: Заголовок
   discipline: Название дисциплины
-  subtitles: Подзаголовки
+  subtitle: Подзаголовок
   faculty: Факультет
   cathedra: Кафедра
   developer: Разработчик

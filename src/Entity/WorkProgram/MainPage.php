@@ -34,14 +34,14 @@ class MainPage extends Page
         return $this;
     }
 
-    public function getHeaders(): array
+    public function getHeader(): string
     {
-        return $this->fields['headers'] ?? [];
+        return $this->fields['header'] ?? '';
     }
 
-    public function setHeaders(array $headers): self
+    public function setHeader(string $header): self
     {
-        $this->fields['headers'] = $headers;
+        $this->fields['header'] = $header;
 
         return $this;
     }
@@ -142,26 +142,14 @@ class MainPage extends Page
         return $this;
     }
 
-    public function getDiscipline(): ?string
+    public function getSubtitle(): string
     {
-        return $this->fields['discipline'];
+        return $this->fields['subtitle'] ?? '';
     }
 
-    public function setDiscipline(string $discipline): self
+    public function setSubtitle(string $subtitle): self
     {
-        $this->fields['discipline'] = $discipline;
-
-        return $this;
-    }
-
-    public function getSubtitles(): array
-    {
-        return $this->fields['subtitles'];
-    }
-
-    public function setSubtitles(array $subtitles): self
-    {
-        $this->fields['subtitles'] = $subtitles;
+        $this->fields['subtitle'] = $subtitle;
 
         return $this;
     }
@@ -217,7 +205,7 @@ class MainPage extends Page
     public function initFields(): array
     {
         $this->fields = [
-            'headers' => [],
+            'header' => '',
             'approver' => [
                 'rank' => '',
                 'fio' => '',
@@ -228,8 +216,7 @@ class MainPage extends Page
                 'year' => 0,
             ],
             'title' => '',
-            'discipline' => '',
-            'subtitles' => [],
+            'subtitle' => '',
             'faculty' => '',
             'cathedra' => '',
             'developer' => '',

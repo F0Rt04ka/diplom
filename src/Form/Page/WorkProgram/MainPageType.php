@@ -3,8 +3,8 @@
 namespace App\Form\Page\WorkProgram;
 
 use App\Entity\WorkProgram\MainPage;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,12 +16,11 @@ class MainPageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('headers', CollectionType::class, [
-                'label' => 'page.main.headers',
-                'entry_type' => TextType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'empty_data' => [],
+            ->add('header', CKEditorType::class, [
+                'label' => 'page.main.header',
+                'empty_data' => '',
+                'config_name' => 'inline_config',
+                'inline' => true,
             ])
             ->add('approver', ApproverType::class, [
                 'label' => 'page.main.approver',
@@ -45,19 +44,11 @@ class MainPageType extends AbstractType
                 ],
                 'empty_data' => '',
             ])
-            ->add('discipline', TextType::class, [
-                'label' => 'page.main.discipline',
-                'constraints' => [
-                    new NotNull(),
-                ],
+            ->add('subtitle', CKEditorType::class, [
+                'label' => 'page.main.subtitle',
                 'empty_data' => '',
-            ])
-            ->add('subtitles', CollectionType::class, [
-                'label' => 'page.main.subtitles',
-                'entry_type' => TextType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'empty_data' => [],
+                'config_name' => 'inline_config',
+                'inline' => true,
             ])
             ->add('faculty', TextType::class, [
                 'label' => 'page.main.faculty',

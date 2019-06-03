@@ -1,9 +1,7 @@
 {# @var page \App\Entity\WorkProgram\MainPage #}
 \begin{titlepage}
   \begin{center}
-    {% for header_line in page.headers %}
-        {{ header_line }} \\
-    {% endfor %}
+	{{ page.header|parse_to_latex }}\\
 
     \medskip
     \begin{large}
@@ -28,10 +26,7 @@
 
     \textbf{\Large{ {{ page.title|upper }} }} \\
     \smallskip
-    по дисциплине \large{\textbf{«{{ page.discipline }}»}} \\
-    {% for subtitle_line in page.subtitles %}
-        {{ subtitle_line }} \\
-    {% endfor %}
+	{{ page.subtitle|parse_to_latex }} \\
 \end{center}
 
 \smallskip \smallskip \vfill
