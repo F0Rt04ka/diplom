@@ -1,12 +1,19 @@
-<div class="modal fade" id="table_block-modal_add_column" tabindex="-1" role="dialog" aria-labelledby="table_block-modal_label" aria-hidden="true">
+<div class="modal fade" id="table_block-modal_add_column" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="table_block-modal_label">{{ 'page.table.modal.main_label.add_column'|trans }}</h5>
+                <h5 class="modal-title column_add">
+                    {{ 'page.table.modal.main_label.add_column'|trans }}
+                </h5>
+                <h5 class="modal-title column_edit">
+                    {{ 'page.table.modal.main_label.edit_column'|trans }}
+                </h5>
+
                 <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'button.close'|trans }}">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
             <div class="modal-body">
                 <div class="form-group">
                     <label for="table_block-modal_add_column_field_column_name" class="col-form-label">
@@ -50,13 +57,23 @@
                         {% endfor %}
                     </select>
                 </div>
-                <input id="table_block-modal_add_column_data_blockId" type="hidden">
-                <input id="table_block-modal_add_column_data_blockName" type="hidden">
+
+                <input id="table_block-modal_column_hidden_colNum" name="colNum" type="hidden">
+                <input id="table_block-modal_column_hidden_blockId" name="blockId" type="hidden">
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'button.close'|trans }}</button>
-                <button id="table_block-modal_btn_add_column" type="submit" class="btn btn-primary">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    {{ 'button.close'|trans }}
+                </button>
+                <button id="table_block-modal_btn_column_add" type="submit" class="btn btn-primary column_add">
                     {{ 'button.add.column'|trans }}
+                </button>
+                <button id="table_block-modal_btn_column_edit" type="submit" class="btn btn-primary column_edit">
+                    {{ 'button.save.column'|trans }}
+                </button>
+                <button id="table_block-modal_btn_column_delete" type="submit" class="btn btn-danger column_edit">
+                    {{ 'button.delete.column'|trans }}
                 </button>
             </div>
         </div>

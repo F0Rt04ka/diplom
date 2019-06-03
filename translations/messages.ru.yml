@@ -94,7 +94,9 @@ page.table:
   comment_to_table: Комментарий к таблице
 
 page.table.modal:
-  main_label.add_column: Добавление нового столбца
+  main_label:
+    add_column: Добавление нового столбца
+    edit_column: Редактирование столбца
   column_name: Название столбца
   column_width: Ширина столбца
   text_orientation: Ориентация текста для названия столбца
@@ -137,6 +139,11 @@ button:
   save:
     save: Сохранить
     comments: Сохранить комментарии
+    column: Сохранить столбец
+
+  delete:
+    column: Удалить столбец
+
   add:
     phones: Добавить номер телефона
     social: 'Add social'
