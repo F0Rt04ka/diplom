@@ -25,8 +25,8 @@
         </div>
 
         <div class="col">
-            {% for page in project.getPagesByVersion(project.selectedVersion) %}
-                {{ render_page_image(project, loop.index)|raw }}
+            {% for url in get_project_page_image_urls(project) %}
+                <div class="page-image"><img src="{{ url }}" alt="page_image_{{ loop.index }}"></div>
             {% endfor %}
         </div>
     </div>

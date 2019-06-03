@@ -12,9 +12,9 @@
                     {{ form_widget(comments_form.all_comments[loop.index0]) }}
                 {% endif %}
             </div>
-            <div class="col">
-                {{ render_page_image(project, loop.index)|raw }}
-            </div>
+            {% for url in get_project_page_image_urls(project) %}
+                <div class="page-image"><img src="{{ url }}" alt="page_image_{{ loop.index }}"></div>
+            {% endfor %}
         </div>
     {% endfor %}
     {{ form_rest(comments_form) }}

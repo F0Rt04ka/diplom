@@ -3,19 +3,29 @@
 namespace App\Twig;
 
 use App\Entity\Project;
+use App\Service\ProjectFilesHelper;
 use cebe\markdown\latex\Markdown;
 use League\HTMLToMarkdown\HtmlConverter;
+use Symfony\Component\Filesystem\Filesystem;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
+    /** @var ProjectFilesHelper */
+    private $projectFilesHelper;
+
+    public function __construct(ProjectFilesHelper $projectFilesHelper)
+    {
+        $this->projectFilesHelper = $projectFilesHelper;
+    }
+
     public function getFunctions()
     {
         return [
-            new TwigFunction('render_page_image', [$this, 'renderPageImage']),
             new TwigFunction('json_decode', [$this, 'jsonDecode']),
+            new TwigFunction('get_project_page_image_urls', [$this, 'getProjectPageImageURLs']),
         ];
     }
 
@@ -26,12 +36,19 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    public function renderPageImage(Project $project, int $imageIndex): string
+    public function getProjectPageImageURLs(Project $project)
     {
-        $src = "/images/project/{$project->getIdentifier()}/{$project->getSelectedVersion()}/image_{$imageIndex}.png";
-        return <<<"HTML"
-<div class="page-image"><img src="{$src}" alt="page_image_{$imageIndex}"></div>
-HTML;
+        $filePath = $this->projectFilesHelper->getOutputLatexFilePath($project->getIdentifier(), $project->getSelectedVersion());
+        $urls = [];
+        $fileSystem = new Filesystem();
+        for ($i = 1; $i < 100; $i++) {
+            if (!$fileSystem->exists("$filePath/image_$i.png")) {
+                break;
+            }
+            $urls[] = "/images/project/{$project->getIdentifier()}/{$project->getSelectedVersion()}/image_{$i}.png";
+        }
+
+        return $urls;
     }
 
     public function parseToLatex($htmlText)
