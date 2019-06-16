@@ -134,7 +134,7 @@ button:
   download:
     download: Загрузить
     pdf: Загрузить PDF
-    latex: Загрузить LATEX
+    latex: Загрузить LaTeX
 
   save:
     save: Сохранить
@@ -171,3 +171,5 @@ label:
     empty: Нет новых комментариев
     exist: Новые комментарии
     read_all: Пометить прочитанными все
+
+comment.text: Текст комментария

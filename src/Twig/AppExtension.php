@@ -3,22 +3,21 @@
 namespace App\Twig;
 
 use App\Entity\Project;
-use App\Service\ProjectFilesHelper;
+use App\Service\ProjectHelper;
 use cebe\markdown\latex\Markdown;
 use League\HTMLToMarkdown\HtmlConverter;
-use Symfony\Component\Filesystem\Filesystem;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
-    /** @var ProjectFilesHelper */
-    private $projectFilesHelper;
+    /** @var ProjectHelper */
+    private $projectHelper;
 
-    public function __construct(ProjectFilesHelper $projectFilesHelper)
+    public function __construct(ProjectHelper $projectHelper)
     {
-        $this->projectFilesHelper = $projectFilesHelper;
+        $this->projectHelper = $projectHelper;
     }
 
     public function getFunctions()
@@ -38,17 +37,7 @@ class AppExtension extends AbstractExtension
 
     public function getProjectPageImageURLs(Project $project)
     {
-        $filePath = $this->projectFilesHelper->getOutputLatexFilePath($project->getIdentifier(), $project->getSelectedVersion());
-        $urls = [];
-        $fileSystem = new Filesystem();
-        for ($i = 1; $i < 100; $i++) {
-            if (!$fileSystem->exists("$filePath/image_$i.png")) {
-                break;
-            }
-            $urls[] = "/images/project/{$project->getIdentifier()}/{$project->getSelectedVersion()}/image_{$i}.png";
-        }
-
-        return $urls;
+        return $this->projectHelper->getProjectImageUrls($project);
     }
 
     public function parseToLatex($htmlText)

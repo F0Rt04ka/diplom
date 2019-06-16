@@ -9,6 +9,7 @@
 
 {{ page.textBeforeTable|parse_to_latex }}
 {% set columnsData = page.tableBlockColumnsData %}
+{% if not columnsData is empty %}
 {% set columnsDataStr = '' %}
 {% for colInfo in columnsData %}
     {% if loop.first %}
@@ -27,10 +28,11 @@
 \hline
 {% for row in page.tableBlockCellsData %}
     {% for cell in row %}
-        {{ (cell~(loop.last ? ' \\\\' : ' & '))|raw }}
+        {{ (cell|parse_to_latex~(loop.last ? ' \\\\' : ' & '))|raw }}
     {% endfor %}
     \hline
 {% endfor %}
 \end{longtabu}
+{% endif %}
 
 {{ page.commentToTable }} \\

@@ -5,16 +5,14 @@
 
     {{ form_start(comments_form) }}
     {{ form_errors(comments_form) }}
-    {% for page in project.getPagesByVersion(project.selectedVersion) %}
+    {% for url in get_project_page_image_urls(project) %}
         <div class="row">
             <div class="col page-comments-block" data-num="{{ loop.index0 }}">
                 {% if comments_form.all_comments[loop.index0] is defined %}
                     {{ form_widget(comments_form.all_comments[loop.index0]) }}
                 {% endif %}
             </div>
-            {% for url in get_project_page_image_urls(project) %}
-                <div class="page-image"><img src="{{ url }}" alt="page_image_{{ loop.index }}"></div>
-            {% endfor %}
+            <div class="page-image"><img src="{{ url }}" alt="page_image_{{ loop.index }}"></div>
         </div>
     {% endfor %}
     {{ form_rest(comments_form) }}

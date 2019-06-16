@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Entity\ProjectLink;
 use App\Repository\ProjectLinkRepository;
 use App\Repository\ProjectRepository;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ProjectHelper
 {
@@ -15,17 +16,17 @@ class ProjectHelper
     /** @var ProjectRepository */
     private $projectRepository;
 
-    /**
-     * ProjectHelper constructor.
-     * @param ProjectLinkRepository $projectLinkRepository
-     * @param ProjectRepository $projectRepository
-     */
+    /** @var ProjectFilesHelper */
+    private $projectFilesHelper;
+
     public function __construct(
         ProjectLinkRepository $projectLinkRepository,
-        ProjectRepository $projectRepository
+        ProjectRepository $projectRepository,
+        ProjectFilesHelper $projectFilesHelper
     ) {
         $this->projectLinkRepository = $projectLinkRepository;
         $this->projectRepository = $projectRepository;
+        $this->projectFilesHelper = $projectFilesHelper;
     }
 
     public function createProjectLink(
@@ -53,4 +54,21 @@ class ProjectHelper
         return array_combine($versions, $versions);
     }
 
+    public function getProjectImageUrls(Project $project)
+    {
+        $filePath = $this->projectFilesHelper->getOutputLatexFilePath(
+            $project->getIdentifier(),
+            $project->getSelectedVersion()
+        );
+        $urls = [];
+        $fileSystem = new Filesystem();
+        for ($i = 1; $i < 100; $i++) {
+            if (!$fileSystem->exists("$filePath/image_$i.png")) {
+                break;
+            }
+            $urls[] = "/images/project/{$project->getIdentifier()}/{$project->getSelectedVersion()}/image_{$i}.png";
+        }
+
+        return $urls;
+    }
 }

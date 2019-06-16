@@ -56,6 +56,7 @@ class ProjectLinkType extends AbstractType
                 }
 
                 $event->getForm()->add('projectVersion', ChoiceType::class, [
+                    'label' => 'project.version',
                     'choices' =>
                         $this->projectHelper->getProjectVersionChoices($link->getProject()),
                 ]);

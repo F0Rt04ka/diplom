@@ -141,7 +141,8 @@ class ProjectController extends AbstractController
         } elseif ($accessHelper->canComment()) {
             $projectLink->getProject()->setCurrentVersion($projectLink->getProjectVersion());
             $commentsData = ['all_comments' => []];
-            for ($i = 0; $i < $project->getPagesByVersion()->count(); $i++) {
+            $projectPageImgageUrls = $this->projectHelper->getProjectImageUrls($project);
+            for ($i = 0; $i < count($projectPageImgageUrls); $i++) {
                 $commentsData['all_comments'][$i] = [
                     'comments' => $projectLink->getCommentsByPageNum($i)->toArray(),
                 ];
