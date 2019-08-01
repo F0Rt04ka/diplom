@@ -17,8 +17,11 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index(Request $request, EntityManagerInterface $em, ProjectHelper $projectHelper)
-    {
+    public function index(
+        Request $request,
+        EntityManagerInterface $em,
+        ProjectHelper $projectHelper
+    ) {
         $createProjectForm = $this->createForm(CreateProjectType::class, new Project());
         $createProjectForm->handleRequest($request);
 
@@ -47,9 +50,8 @@ class DefaultController extends AbstractController
             $findProjectForm->addError(new FormError('Project not exist!'));
         }
 
-
         return $this->render('default/index.html.twig', [
-            'project_form'      => $createProjectForm->createView(),
+            'project_form' => $createProjectForm->createView(),
             'find_project_form' => $findProjectForm->createView(),
         ]);
     }

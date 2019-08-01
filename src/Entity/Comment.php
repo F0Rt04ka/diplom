@@ -36,9 +36,10 @@ class Comment
      * @ORM\Column(type="integer")
      */
     private $pageNum;
+
     public function __toString()
     {
-            return $this->text;
+        return $this->text;
     }
 
     public function getId(): ?int

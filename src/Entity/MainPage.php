@@ -82,7 +82,7 @@ class MainPage extends Page
     public function setHeader1(string $header1): self
     {
         $this->header1 = $header1;
-        
+
         return $this;
     }
 
@@ -90,7 +90,7 @@ class MainPage extends Page
     {
         return $this->header2;
     }
-    
+
     public function setHeader2(string $header2): self
     {
         $this->header2 = $header2;
@@ -126,14 +126,14 @@ class MainPage extends Page
     {
         return $this->universityName3;
     }
-    
-    public function setUniversityName3(string $universityName3): self 
+
+    public function setUniversityName3(string $universityName3): self
     {
         $this->universityName3 = $universityName3;
-        
+
         return $this;
     }
-    
+
     public function getAuthor(): ?string
     {
         return $this->author;
@@ -142,7 +142,7 @@ class MainPage extends Page
     public function setAuthor(string $author): self
     {
         $this->author = $author;
-        
+
         return $this;
     }
 
@@ -154,7 +154,7 @@ class MainPage extends Page
     public function setWorkName(string $workName): self
     {
         $this->workName = $workName;
-        
+
         return $this;
     }
 

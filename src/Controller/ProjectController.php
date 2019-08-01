@@ -97,7 +97,7 @@ class ProjectController extends AbstractController
                     return $link->toArray();
                 })
             );
-        } else {
+        } elseif ($request->getMethod() === 'POST') {
             $projectLinksForm = $this->requestHandler->createLinksConfigForm($project);
             $projectLinksForm->handleRequest($request);
             if ($projectLinksForm->isValid()) {

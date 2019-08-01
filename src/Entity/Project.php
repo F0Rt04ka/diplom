@@ -166,7 +166,7 @@ class Project
         $mainPageClass = $mainPageClassMap[$this->getType()];
         $mainPage = $this->getPagesByType($mainPageClass, $version)->first();
 
-        return  $mainPage ? $mainPage : null;
+        return $mainPage ? $mainPage : null;
     }
 
     /**
@@ -181,7 +181,7 @@ class Project
                 return $page instanceof $pageType;
             });
 
-        return  $pages;
+        return $pages;
     }
 
     /**
